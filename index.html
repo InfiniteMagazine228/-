@@ -3,374 +3,81 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coin Runner - HTML Game + Google Pay Demo</title>
-  <style>
-    :root {
-      --bg: #0f172a;
-      --panel: #111827;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: #22c55e;
-      --danger: #ef4444;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top, #1e293b, var(--bg));
-      color: var(--text);
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 16px;
-    }
-    .wrap {
-      width: min(960px, 100%);
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 16px;
-    }
-    canvas {
-      width: 100%;
-      background: linear-gradient(#38bdf8, #0f172a 78%);
-      border-radius: 24px;
-      box-shadow: 0 24px 80px rgba(0,0,0,.35);
-      border: 2px solid rgba(255,255,255,.12);
-    }
-    .panel {
-      background: rgba(17, 24, 39, .86);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 24px;
-      padding: 18px;
-      box-shadow: 0 24px 80px rgba(0,0,0,.25);
-    }
-    h1 { margin: 0 0 8px; font-size: 28px; }
-    p { color: var(--muted); line-height: 1.5; }
-    .stat {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,.1);
-      font-size: 18px;
-    }
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 14px;
-      padding: 14px 16px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 12px;
-      color: #052e16;
-      background: var(--accent);
-      font-size: 16px;
-    }
-    button.secondary { background: #e2e8f0; color: #0f172a; }
-    button.danger { background: var(--danger); color: white; }
-    #googlePayButton { margin-top: 12px; min-height: 44px; }
-    .note { font-size: 13px; color: #cbd5e1; }
-    kbd {
-      background: #020617;
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 6px;
-      padding: 2px 6px;
-    }
-    @media (max-width: 820px) {
-      .wrap { grid-template-columns: 1fr; }
-    }
-  </style>
-  <!-- Google H5 Games Ads / Ad Placement API
-       Thay ca-pub-XXXXXXXXXXXXXXXX bằng AdSense Publisher ID thật của bạn.
-       data-adbreak-test="on" chỉ dùng để test; khi public thật thì xóa dòng này. -->
+  <title>Coin Runner</title>
+
+  <!-- Google Ads -->
   <script async
     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706"
-    crossorigin="anonymous"
-    data-ad-client="ca-pub-1057751843910706"
-  <script>
-    window.adsbygoogle = window.adsbygoogle || [];
-    window.adBreak = window.adBreak || function(o) { window.adsbygoogle.push(o); };
-    window.adConfig = window.adConfig || function(o) { window.adsbygoogle.push(o); };
-    window.adConfig({ preloadAdBreaks: 'on', sound: 'on' });
-  </script>
+    crossorigin="anonymous"></script>
+
+  <style>
+    body { margin:0; font-family:Arial; background:#0f172a; color:white; text-align:center; }
+    canvas { background:#111827; margin-top:20px; border-radius:10px; }
+    button { padding:10px; margin:5px; border:none; border-radius:8px; cursor:pointer; }
+  </style>
 </head>
 <body>
-  <div class="wrap">
-    <canvas id="game" width="640" height="420"></canvas>
 
-    <aside class="panel">
-      <h1>Coin Runner</h1>
-      <p>Nhảy qua chướng ngại vật, ăn xu, xem quảng cáo nhận xu và mua skin trong shop.</p>
+<h1>Coin Runner</h1>
 
-      <div class="stat"><span>Điểm</span><strong id="score">0</strong></div>
-      <div class="stat"><span>Xu</span><strong id="coins">0</strong></div>
-      <div class="stat"><span>Skin</span><strong id="skin">Basic</strong></div>
+<canvas id="game" width="400" height="300"></canvas>
 
-      <button id="startBtn">Bắt đầu / Chơi lại</button>
-      <button class="secondary" id="jumpBtn">Nhảy</button>
-      <button id="watchAdBtn">Xem QC +25 xu</button>
-      <button class="secondary" id="buyGoldBtn">Mua Skin Gold - 50 xu</button>
-      <button class="secondary" id="buyFireBtn">Mua Skin Fire - 100 xu</button>
+<div>
+  <button onclick="jump()">Nhảy</button>
+  <button onclick="watchAd()">Xem QC +25 xu</button>
+  <button onclick="buySkin()">Mua Skin (50 xu)</button>
+</div>
 
-      <p class="note">
-        Điều khiển: nhấn <kbd>Space</kbd> hoặc nút “Nhảy”. Nút “Xem QC” dùng rewarded ads thật khi bạn có Publisher ID.
-      </p>
-    </aside>
-  </div>
+<p>Xu: <span id="coins">0</span></p>
+<p>Skin: <span id="skin">Basic</span></p>
 
-  <script>
-    const canvas = document.getElementById('game');
-    const ctx = canvas.getContext('2d');
-    const scoreEl = document.getElementById('score');
-    const coinsEl = document.getElementById('coins');
-    const skinEl = document.getElementById('skin');
-    const startBtn = document.getElementById('startBtn');
-    const jumpBtn = document.getElementById('jumpBtn');
-    const watchAdBtn = document.getElementById('watchAdBtn');
-    const buyGoldBtn = document.getElementById('buyGoldBtn');
-    const buyFireBtn = document.getElementById('buyFireBtn');
+<!-- Menu -->
+<div style="position:fixed;bottom:10px;left:10px;">
+  <a href="/about.html">About</a> |
+  <a href="/privacy.html">Privacy</a>
+</div>
 
-    let player, obstacles, coins, score, ownedCoins, running, frame, speed, currentSkin;
-    ownedCoins = Number(localStorage.getItem('coins') || 0);
-    currentSkin = localStorage.getItem('currentSkin') || 'Basic';
+<script>
+let coins = Number(localStorage.getItem('coins')||0);
+let skin = localStorage.getItem('skin')||'Basic';
 
-    function resetGame() {
-      player = { x: 80, y: 320, w: 38, h: 48, vy: 0, grounded: true };
-      obstacles = [];
-      coins = [];
-      score = 0;
-      frame = 0;
-      speed = 4;
-      running = true;
-      updateUI();
+document.getElementById('coins').textContent = coins;
+document.getElementById('skin').textContent = skin;
+
+function jump(){ alert('jump demo'); }
+
+function watchAd(){
+  if(typeof adBreak !== 'function'){
+    alert('QC chưa sẵn sàng');
+    return;
+  }
+
+  adBreak({
+    type:'reward',
+    name:'reward',
+    beforeReward: showAdFn => showAdFn(),
+    adViewed: () => {
+      coins += 25;
+      localStorage.setItem('coins', coins);
+      document.getElementById('coins').textContent = coins;
+      alert('+25 xu');
     }
+  });
+}
 
-    function updateUI() {
-      scoreEl.textContent = Math.floor(score);
-      coinsEl.textContent = ownedCoins;
-      skinEl.textContent = currentSkin;
-    }
+function buySkin(){
+  if(coins < 50){
+    alert('Không đủ xu');
+    return;
+  }
+  coins -= 50;
+  skin = 'Gold';
+  localStorage.setItem('coins', coins);
+  localStorage.setItem('skin', skin);
+  document.getElementById('coins').textContent = coins;
+  document.getElementById('skin').textContent = skin;
+}
+</script>
 
-    function jump() {
-      if (!running) resetGame();
-      if (player.grounded) {
-        player.vy = -12;
-        player.grounded = false;
-      }
-    }
-
-    function rectHit(a, b) {
-      return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-    }
-
-    function spawn() {
-      if (frame % 95 === 0) {
-        obstacles.push({ x: canvas.width, y: 338, w: 34, h: 30 + Math.random() * 34 });
-      }
-      if (frame % 70 === 0) {
-        coins.push({ x: canvas.width, y: 235 + Math.random() * 70, w: 22, h: 22 });
-      }
-    }
-
-    function drawGround() {
-      ctx.fillStyle = '#14532d';
-      ctx.fillRect(0, 368, canvas.width, 52);
-      ctx.fillStyle = 'rgba(255,255,255,.16)';
-      for (let i = 0; i < canvas.width; i += 32) ctx.fillRect(i, 382, 18, 4);
-    }
-
-    function drawPlayer() {
-      const skinColors = {
-        Basic: '#22c55e',
-        Gold: '#facc15',
-        Fire: '#f97316'
-      };
-      ctx.fillStyle = skinColors[currentSkin] || skinColors.Basic;
-      ctx.fillRect(player.x, player.y, player.w, player.h);
-      ctx.fillStyle = '#020617';
-      ctx.fillRect(player.x + 24, player.y + 12, 7, 7);
-    }
-
-    function drawObstacle(o) {
-      ctx.fillStyle = '#ef4444';
-      ctx.fillRect(o.x, o.y, o.w, o.h);
-    }
-
-    function drawCoin(c) {
-      ctx.beginPath();
-      ctx.arc(c.x + c.w / 2, c.y + c.h / 2, c.w / 2, 0, Math.PI * 2);
-      ctx.fillStyle = '#facc15';
-      ctx.fill();
-      ctx.strokeStyle = '#854d0e';
-      ctx.stroke();
-    }
-
-    function drawText() {
-      ctx.fillStyle = 'white';
-      ctx.font = '700 22px Arial';
-      ctx.fillText('Score: ' + Math.floor(score), 20, 34);
-      if (!running) {
-        ctx.fillStyle = 'rgba(15,23,42,.78)';
-        ctx.fillRect(150, 145, 340, 120);
-        ctx.fillStyle = 'white';
-        ctx.font = '700 30px Arial';
-        ctx.fillText('Game Over', 245, 195);
-        ctx.font = '16px Arial';
-        ctx.fillText('Nhấn Space hoặc Bắt đầu để chơi lại', 205, 230);
-      }
-    }
-
-    function loop() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawGround();
-
-      if (running) {
-        frame++;
-        score += 0.1;
-        speed += 0.0016;
-        spawn();
-
-        player.vy += 0.62;
-        player.y += player.vy;
-        if (player.y >= 320) {
-          player.y = 320;
-          player.vy = 0;
-          player.grounded = true;
-        }
-
-        obstacles.forEach(o => o.x -= speed);
-        coins.forEach(c => c.x -= speed);
-        obstacles = obstacles.filter(o => o.x + o.w > 0);
-        coins = coins.filter(c => c.x + c.w > 0);
-
-        for (const o of obstacles) {
-          if (rectHit(player, o)) running = false;
-        }
-
-        coins = coins.filter(c => {
-          if (rectHit(player, c)) {
-            ownedCoins++;
-            localStorage.setItem('coins', ownedCoins);
-            updateUI();
-            return false;
-          }
-          return true;
-        });
-
-        updateUI();
-      }
-
-      drawPlayer();
-      obstacles.forEach(drawObstacle);
-      coins.forEach(drawCoin);
-      drawText();
-      requestAnimationFrame(loop);
-    }
-
-    startBtn.addEventListener('click', resetGame);
-    jumpBtn.addEventListener('click', jump);
-    window.addEventListener('keydown', e => {
-      if (e.code === 'Space') {
-        e.preventDefault();
-        jump();
-      }
-    });
-
-    resetGame();
-    loop();
-
-    // ===============================
-    // Rewarded Ads thật bằng Google H5 Games Ads
-    // ===============================
-    // Cần AdSense Publisher ID thật và game/domain được duyệt.
-    // Quy tắc: chỉ cộng xu trong callback adViewed, tức là khi quảng cáo đã được xem.
-
-    let adBusy = false;
-
-    watchAdBtn.addEventListener('click', async () => {
-      if (adBusy) return;
-      adBusy = true;
-      watchAdBtn.disabled = true;
-      watchAdBtn.textContent = 'Đang mở QC...';
-
-      const rewarded = await showRewardedAd();
-      if (rewarded) {
-        ownedCoins += 25;
-        localStorage.setItem('coins', ownedCoins);
-        updateUI();
-        alert('Xem QC xong! Bạn nhận +25 xu.');
-      } else {
-        alert('QC chưa sẵn sàng hoặc bạn chưa xem hết. Không cộng xu.');
-      }
-
-      adBusy = false;
-      watchAdBtn.disabled = false;
-      watchAdBtn.textContent = 'Xem QC +25 xu';
-    });
-
-    buyGoldBtn.addEventListener('click', () => buySkin('Gold', 50));
-    buyFireBtn.addEventListener('click', () => buySkin('Fire', 100));
-
-    function buySkin(name, price) {
-      if (currentSkin === name) {
-        alert('Bạn đang dùng skin này rồi.');
-        return;
-      }
-      if (ownedCoins < price) {
-        alert('Bạn chưa đủ xu. Hãy chơi thêm hoặc xem QC.');
-        return;
-      }
-
-      ownedCoins -= price;
-      currentSkin = name;
-      localStorage.setItem('coins', ownedCoins);
-      localStorage.setItem('currentSkin', currentSkin);
-      updateUI();
-      alert('Đã mua và tự động dùng Skin ' + name + '!');
-    }
-
-    function pauseGameForAd() {
-      running = false;
-    }
-
-    function resumeGameAfterAd() {
-      // Không tự reset game. Người chơi bấm Bắt đầu/Space nếu đang game over.
-      // Nếu muốn quảng cáo không làm dừng game, có thể bỏ dòng này.
-    }
-
-    function showRewardedAd() {
-      return new Promise(resolve => {
-        if (typeof window.adBreak !== 'function') {
-          resolve(false);
-          return;
-        }
-
-        let rewardGranted = false;
-
-        window.adBreak({
-          type: 'reward',
-          name: 'rewarded_coin_25',
-          beforeAd: () => {
-            pauseGameForAd();
-          },
-          beforeReward: showAdFn => {
-            // Bắt buộc gọi showAdFn() để hiển thị rewarded ad.
-            showAdFn();
-          },
-          adViewed: () => {
-            rewardGranted = true;
-          },
-          adDismissed: () => {
-            rewardGranted = false;
-          },
-          afterAd: () => {
-            resumeGameAfterAd();
-          },
-          adBreakDone: () => {
-            resolve(rewardGranted);
-          }
-        });
-      });
-    }
-  </script>
 </body>
 </html>
