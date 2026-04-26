@@ -8,172 +8,473 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706" crossorigin="anonymous"></script>
 
   <style>
+    * { box-sizing: border-box; }
+
     body {
-      margin:0;
-      font-family:Arial;
-      background:#0f172a;
-      color:white;
-      text-align:center;
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #334155, #020617 70%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
     }
 
-    h1 { margin-top:10px; }
+    .app {
+      width: min(980px, 100%);
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 18px;
+    }
+
+    .game-card, .side-card {
+      background: rgba(15, 23, 42, .86);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 24px;
+      box-shadow: 0 24px 70px rgba(0,0,0,.4);
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: rgba(2, 6, 23, .55);
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .badge {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(34,197,94,.15);
+      border: 1px solid rgba(34,197,94,.4);
+      color: #86efac;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .canvas-wrap {
+      position: relative;
+      padding: 14px;
+    }
 
     canvas {
-      background:#111827;
-      border-radius:10px;
-      margin-top:10px;
+      width: 100%;
+      max-width: 640px;
+      aspect-ratio: 16/9;
+      background: linear-gradient(#38bdf8, #0f172a 75%);
+      border-radius: 18px;
+      display: block;
+      margin: 0 auto;
+      border: 2px solid rgba(255,255,255,.12);
     }
 
-    .panel {
-      margin-top:10px;
+    .overlay {
+      position: absolute;
+      inset: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .modal {
+      width: min(390px, 90%);
+      padding: 22px;
+      border-radius: 22px;
+      background: rgba(2,6,23,.86);
+      border: 1px solid rgba(255,255,255,.18);
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .modal h2 { margin: 0 0 8px; font-size: 30px; }
+    .modal p { color: #cbd5e1; line-height: 1.45; }
+
+    .side-card {
+      padding: 18px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px;
+      padding: 13px;
+      text-align: left;
+    }
+
+    .stat span {
+      display: block;
+      color: #94a3b8;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .stat strong {
+      font-size: 22px;
     }
 
     button {
-      padding:10px;
-      margin:5px;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
-      font-weight:bold;
+      width: 100%;
+      border: none;
+      border-radius: 15px;
+      padding: 13px 14px;
+      margin-top: 9px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 900;
+      transition: transform .12s, filter .12s;
     }
 
-    .stats {
-      margin-top:10px;
-      font-size:18px;
+    button:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    button:active { transform: translateY(0); }
+
+    .primary { background: #22c55e; color: #052e16; }
+    .blue { background: #38bdf8; color: #082f49; }
+    .gold { background: #facc15; color: #422006; }
+    .fire { background: #fb923c; color: #431407; }
+    .ghost { background: rgba(255,255,255,.12); color: white; border: 1px solid rgba(255,255,255,.16); }
+
+    .section-title {
+      text-align: left;
+      margin: 18px 0 8px;
+      color: #e2e8f0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
     }
 
-    .menu {
-      position:fixed;
-      bottom:10px;
-      left:10px;
-      font-size:14px;
+    .hint {
+      margin-top: 14px;
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .links {
+      margin-top: 14px;
+      font-size: 14px;
+    }
+
+    .links a { color: #93c5fd; }
+
+    @media (max-width: 850px) {
+      .app { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<h1>🎮 Coin Runner</h1>
-<p>Nhấn SPACE hoặc nút Nhảy để chơi</p>
+<div class="app">
+  <main class="game-card">
+    <div class="topbar">
+      <div class="logo">🎮 Coin Runner</div>
+      <div class="badge" id="statusBadge">Sẵn sàng</div>
+    </div>
 
-<canvas id="game" width="400" height="300"></canvas>
+    <div class="canvas-wrap">
+      <canvas id="game" width="640" height="360"></canvas>
+      <div class="overlay" id="overlay">
+        <div class="modal">
+          <h2 id="overlayTitle">Coin Runner</h2>
+          <p id="overlayText">Nhảy qua block đỏ, sống càng lâu càng nhiều điểm. Xem QC để nhận xu và mua skin.</p>
+        </div>
+      </div>
+    </div>
+  </main>
 
-<div class="panel">
-  <button onclick="jump()">⬆ Nhảy</button>
-  <button onclick="watchAd()">📺 Xem QC +25 xu</button>
-  <button onclick="buySkin()">💰 Mua Skin (50 xu)</button>
-</div>
+  <aside class="side-card">
+    <div class="stat-grid">
+      <div class="stat"><span>Điểm</span><strong id="score">0</strong></div>
+      <div class="stat"><span>Kỷ lục</span><strong id="best">0</strong></div>
+      <div class="stat"><span>Xu</span><strong id="coins">0</strong></div>
+      <div class="stat"><span>Skin</span><strong id="skin">Basic</strong></div>
+    </div>
 
-<div class="stats">
-  Xu: <span id="coins">0</span> | Skin: <span id="skin">Basic</span>
-</div>
+    <button class="primary" id="playBtn">▶ Bắt đầu</button>
+    <button class="blue" id="jumpBtn">⬆ Nhảy</button>
+    <button class="ghost" id="adBtn">📺 Xem QC +25 xu</button>
 
-<div class="menu">
-  <a href="/about.html">About</a> |
-  <a href="/privacy.html">Privacy</a>
+    <div class="section-title">Shop Skin</div>
+    <button class="gold" id="goldBtn">Mua Gold Skin - 50 xu</button>
+    <button class="fire" id="fireBtn">Mua Fire Skin - 100 xu</button>
+    <button class="ghost" id="basicBtn">Dùng Basic Skin</button>
+
+    <p class="hint">
+      Điều khiển: nhấn Space hoặc nút Nhảy. Chạm block đỏ là thua. Sau Game Over bấm “Chơi lại”.
+    </p>
+
+    <div class="links">
+      <a href="/about.html">About</a> | <a href="/privacy.html">Privacy</a>
+    </div>
+  </aside>
 </div>
 
 <script>
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
-let player = {x:50,y:200,w:30,h:30,vy:0};
-let gravity = 0.6;
-let coins = Number(localStorage.getItem('coins')||0);
-let skin = localStorage.getItem('skin')||'Basic';
+const scoreEl = document.getElementById('score');
+const bestEl = document.getElementById('best');
+const coinsEl = document.getElementById('coins');
+const skinEl = document.getElementById('skin');
+const statusBadge = document.getElementById('statusBadge');
+const overlay = document.getElementById('overlay');
+const overlayTitle = document.getElementById('overlayTitle');
+const overlayText = document.getElementById('overlayText');
+
+const playBtn = document.getElementById('playBtn');
+const jumpBtn = document.getElementById('jumpBtn');
+const adBtn = document.getElementById('adBtn');
+const goldBtn = document.getElementById('goldBtn');
+const fireBtn = document.getElementById('fireBtn');
+const basicBtn = document.getElementById('basicBtn');
+
+let coins = Number(localStorage.getItem('coins') || 0);
+let best = Number(localStorage.getItem('best') || 0);
+let skin = localStorage.getItem('skin') || 'Basic';
+let ownedSkins = JSON.parse(localStorage.getItem('ownedSkins') || '["Basic"]');
+
+let state = 'menu';
+let score = 0;
+let frame = 0;
+let speed = 4;
 let obstacles = [];
-let gameRunning = true;
+let clouds = [];
+let player = { x: 80, y: 250, w: 34, h: 42, vy: 0, grounded: true };
 
-function updateUI(){
-  document.getElementById('coins').textContent = coins;
-  document.getElementById('skin').textContent = skin;
+function save() {
+  localStorage.setItem('coins', coins);
+  localStorage.setItem('best', best);
+  localStorage.setItem('skin', skin);
+  localStorage.setItem('ownedSkins', JSON.stringify(ownedSkins));
 }
-updateUI();
 
-function jump(){
-  if(player.y >= 200){
-    player.vy = -10;
+function updateUI() {
+  scoreEl.textContent = Math.floor(score);
+  bestEl.textContent = Math.floor(best);
+  coinsEl.textContent = coins;
+  skinEl.textContent = skin;
+
+  if (state === 'playing') {
+    statusBadge.textContent = 'Đang chơi';
+    playBtn.textContent = '↻ Chơi lại';
+  } else if (state === 'gameover') {
+    statusBadge.textContent = 'Game Over';
+    playBtn.textContent = '↻ Chơi lại';
+  } else {
+    statusBadge.textContent = 'Sẵn sàng';
+    playBtn.textContent = '▶ Bắt đầu';
   }
 }
 
-window.addEventListener('keydown', e=>{
-  if(e.code==='Space') jump();
-});
-
-function spawnObstacle(){
-  if(Math.random()<0.02){
-    obstacles.push({x:400,y:220,w:20,h:20});
-  }
+function setOverlay(show, title='', text='') {
+  overlay.style.display = show ? 'flex' : 'none';
+  if (title) overlayTitle.textContent = title;
+  if (text) overlayText.textContent = text;
 }
 
-function update(){
-  if(!gameRunning) return;
-
-  ctx.clearRect(0,0,400,300);
-
-  // player physics
-  player.vy += gravity;
-  player.y += player.vy;
-
-  if(player.y > 200){
-    player.y = 200;
-    player.vy = 0;
-  }
-
-  // draw player
-  ctx.fillStyle = skin==='Gold' ? 'gold' : 'lime';
-  ctx.fillRect(player.x, player.y, player.w, player.h);
-
-  // obstacles
-  spawnObstacle();
-
-  obstacles.forEach(o=>{
-    o.x -= 3;
-    ctx.fillStyle='red';
-    ctx.fillRect(o.x,o.y,o.w,o.h);
-
-    // collision
-    if(player.x < o.x+o.w && player.x+player.w > o.x && player.y < o.y+o.h && player.y+player.h > o.y){
-      gameRunning = false;
-      alert('💀 Game Over');
-    }
-  });
-
-  obstacles = obstacles.filter(o=>o.x>-20);
-
-  requestAnimationFrame(update);
+function resetGame() {
+  state = 'playing';
+  score = 0;
+  frame = 0;
+  speed = 4;
+  obstacles = [];
+  clouds = [{x:90,y:60},{x:310,y:42},{x:530,y:78}];
+  player = { x: 80, y: 250, w: 34, h: 42, vy: 0, grounded: true };
+  setOverlay(false);
+  updateUI();
 }
-update();
 
-function watchAd(){
-  if(typeof adBreak !== 'function'){
-    alert('QC chưa sẵn sàng');
+function gameOver() {
+  state = 'gameover';
+  best = Math.max(best, Math.floor(score));
+  save();
+  setOverlay(true, '💀 Game Over', 'Điểm của bạn: ' + Math.floor(score) + '. Bấm “Chơi lại” để thử lại.');
+  updateUI();
+}
+
+function jump() {
+  if (state === 'menu' || state === 'gameover') {
+    resetGame();
     return;
   }
+  if (player.grounded) {
+    player.vy = -12;
+    player.grounded = false;
+  }
+}
+
+function buyOrUseSkin(name, price) {
+  if (ownedSkins.includes(name)) {
+    skin = name;
+    save();
+    updateUI();
+    alert('Đang dùng Skin ' + name);
+    return;
+  }
+
+  if (coins < price) {
+    alert('Bạn chưa đủ xu. Hãy xem QC hoặc chơi thêm.');
+    return;
+  }
+
+  coins -= price;
+  ownedSkins.push(name);
+  skin = name;
+  save();
+  updateUI();
+  alert('Đã mua và dùng Skin ' + name + '!');
+}
+
+function skinColor() {
+  if (skin === 'Gold') return '#facc15';
+  if (skin === 'Fire') return '#fb923c';
+  return '#22c55e';
+}
+
+function hit(a,b) {
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+function drawCloud(x,y) {
+  ctx.fillStyle = 'rgba(255,255,255,.8)';
+  ctx.beginPath();
+  ctx.arc(x, y, 16, 0, Math.PI*2);
+  ctx.arc(x+18, y-8, 20, 0, Math.PI*2);
+  ctx.arc(x+40, y, 16, 0, Math.PI*2);
+  ctx.fill();
+}
+
+function draw() {
+  ctx.clearRect(0,0,640,360);
+
+  const sky = ctx.createLinearGradient(0,0,0,360);
+  sky.addColorStop(0,'#38bdf8');
+  sky.addColorStop(.7,'#0f172a');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0,0,640,360);
+
+  clouds.forEach(c => drawCloud(c.x, c.y));
+
+  ctx.fillStyle = '#166534';
+  ctx.fillRect(0, 292, 640, 68);
+  ctx.fillStyle = 'rgba(255,255,255,.18)';
+  for (let x = 0; x < 640; x += 38) ctx.fillRect(x, 310, 22, 5);
+
+  ctx.fillStyle = skinColor();
+  ctx.fillRect(player.x, player.y, player.w, player.h);
+  ctx.fillStyle = '#020617';
+  ctx.fillRect(player.x + 22, player.y + 10, 7, 7);
+
+  obstacles.forEach(o => {
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(o.x, o.y, o.w, o.h);
+    ctx.fillStyle = 'rgba(255,255,255,.35)';
+    ctx.fillRect(o.x + 5, o.y + 5, o.w - 10, 5);
+  });
+
+  ctx.fillStyle = 'white';
+  ctx.font = '900 22px Arial';
+  ctx.fillText('Score: ' + Math.floor(score), 18, 34);
+}
+
+function updateGame() {
+  if (state === 'playing') {
+    frame++;
+    score += 0.12;
+    speed += 0.0018;
+
+    player.vy += 0.65;
+    player.y += player.vy;
+    if (player.y >= 250) {
+      player.y = 250;
+      player.vy = 0;
+      player.grounded = true;
+    }
+
+    clouds.forEach(c => {
+      c.x -= 0.4;
+      if (c.x < -70) c.x = 690;
+    });
+
+    if (frame % 85 === 0) {
+      const h = 28 + Math.random() * 22;
+      obstacles.push({ x: 650, y: 292 - h, w: 28, h });
+    }
+
+    obstacles.forEach(o => o.x -= speed);
+    obstacles = obstacles.filter(o => o.x > -40);
+
+    for (const o of obstacles) {
+      if (hit(player, o)) gameOver();
+    }
+
+    updateUI();
+  }
+
+  draw();
+  requestAnimationFrame(updateGame);
+}
+
+function watchAd() {
+  if (typeof adBreak !== 'function') {
+    alert('QC chưa sẵn sàng. Chờ AdSense duyệt hoặc thử lại sau.');
+    return;
+  }
+
+  adBtn.disabled = true;
+  adBtn.textContent = 'Đang mở QC...';
 
   adBreak({
     type:'reward',
-    name:'reward',
+    name:'reward_coin_25',
     beforeReward: showAdFn => showAdFn(),
-    adViewed: ()=>{
+    adViewed: () => {
       coins += 25;
-      localStorage.setItem('coins', coins);
+      save();
       updateUI();
       alert('+25 xu');
+    },
+    adBreakDone: () => {
+      adBtn.disabled = false;
+      adBtn.textContent = '📺 Xem QC +25 xu';
     }
   });
 }
 
-function buySkin(){
-  if(coins < 50){
-    alert('Không đủ xu');
-    return;
+playBtn.addEventListener('click', resetGame);
+jumpBtn.addEventListener('click', jump);
+adBtn.addEventListener('click', watchAd);
+goldBtn.addEventListener('click', () => buyOrUseSkin('Gold', 50));
+fireBtn.addEventListener('click', () => buyOrUseSkin('Fire', 100));
+basicBtn.addEventListener('click', () => buyOrUseSkin('Basic', 0));
+
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    jump();
   }
-  coins -= 50;
-  skin = 'Gold';
-  localStorage.setItem('coins', coins);
-  localStorage.setItem('skin', skin);
-  updateUI();
-}
+});
+
+setOverlay(true, 'Coin Runner', 'Nhảy qua block đỏ, sống càng lâu càng nhiều điểm. Xem QC để nhận xu và mua skin.');
+updateUI();
+updateGame();
 </script>
 
 </body>
