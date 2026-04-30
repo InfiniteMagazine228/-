@@ -6,6 +6,12 @@
   <title>Coin Runner</title>
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706" crossorigin="anonymous"></script>
+  <script>
+    window.adsbygoogle = window.adsbygoogle || [];
+    window.adBreak = window.adBreak || function(o) { window.adsbygoogle.push(o); };
+    window.adConfig = window.adConfig || function(o) { window.adsbygoogle.push(o); };
+    window.adConfig({ preloadAdBreaks: 'on', sound: 'on' });
+  </script>
 
   <style>
     * { box-sizing: border-box; }
@@ -176,6 +182,22 @@
     @media (max-width: 850px) {
       .app { grid-template-columns: 1fr; }
     }
+  
+    .ad-box {
+      margin: 14px;
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      min-height: 90px;
+    }
+
+    .ad-label {
+      color: #94a3b8;
+      font-size: 12px;
+      margin-bottom: 6px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -195,6 +217,16 @@
           <p id="overlayText">Nhảy qua block đỏ, sống càng lâu càng nhiều điểm. Xem QC để nhận xu và mua skin.</p>
         </div>
       </div>
+    </div>
+  
+    <div class="ad-box">
+      <div class="ad-label">Quảng cáo</div>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1057751843910706"
+           data-ad-slot="1398284710"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
     </div>
   </main>
 
@@ -226,6 +258,12 @@
 </div>
 
 <script>
+try {
+  (window.adsbygoogle = window.adsbygoogle || []).push({});
+} catch (e) {
+  console.warn('AdSense banner chưa sẵn sàng:', e);
+}
+
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
