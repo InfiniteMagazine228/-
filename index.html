@@ -3,105 +3,407 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Yah Games - Mini Game Online</title>
+  <title>Yah Games - Coin Runner</title>
 
-  <!-- Google AdSense -->
+  <!-- Google AdSense: đặt 1 lần trong head -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706"
-     crossorigin="anonymous"></script>
-<!-- ta -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-1057751843910706"
-     data-ad-slot="6646434479"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-  
+    crossorigin="anonymous"></script>
+
   <style>
-    body{
-      margin:0;
-      font-family:Arial;
-      background:#0f172a;
-      color:white;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #0f172a, #020617);
+      color: white;
+      text-align: center;
+      min-height: 100vh;
     }
 
-    header{
-      background:#1e293b;
-      padding:15px;
-      text-align:center;
-      font-size:24px;
-      font-weight:bold;
+    header {
+      background: #1e293b;
+      padding: 16px;
+      font-size: 26px;
+      font-weight: 900;
+      border-bottom: 1px solid rgba(255,255,255,.12);
     }
 
-    .container{
-      max-width:900px;
-      margin:auto;
-      padding:15px;
+    .wrap {
+      width: min(920px, 100%);
+      margin: auto;
+      padding: 14px;
     }
 
-    .card{
-      background:#1e293b;
-      padding:15px;
-      border-radius:10px;
-      margin-bottom:15px;
+    .card {
+      background: rgba(30, 41, 59, .9);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.3);
     }
 
-    h2{margin-top:0;}
+    .ad-card {
+      min-height: 100px;
+      overflow: hidden;
+    }
 
-    a{
-      color:#38bdf8;
+    .ad-label {
+      color: #94a3b8;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 640px;
+      aspect-ratio: 16 / 9;
+      background: #111827;
+      border-radius: 16px;
+      border: 2px solid rgba(255,255,255,.12);
+      display: block;
+      margin: 0 auto;
+    }
+
+    .buttons {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .green { background: #22c55e; color: #052e16; }
+    .blue { background: #38bdf8; color: #082f49; }
+    .yellow { background: #facc15; color: #422006; }
+    .orange { background: #fb923c; color: #431407; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .stat span {
+      display: block;
+      color: #94a3b8;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .stat strong {
+      font-size: 20px;
+    }
+
+    .links a { color: #93c5fd; }
+
+    @media (max-width: 600px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .buttons { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+  <header>🎮 Yah Games - Coin Runner</header>
 
-<header>🎮 Yah Games</header>
+  <div class="wrap">
+    <section class="card">
+      <h2>Chơi game miễn phí</h2>
+      <p>Nhảy để né block đỏ, ăn xu vàng và mua skin. Nhấn Space hoặc nút Nhảy để chơi.</p>
+    </section>
 
-<div class="container">
+    <!-- Banner ads: đặt trong body, ngay trên game -->
+    <section class="card ad-card">
+      <div class="ad-label">Quảng cáo</div>
 
-  <!-- ADS -->
-  <div class="card">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-1057751843910706"
-         data-ad-slot="6646434479"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+      <!-- ta -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1057751843910706"
+           data-ad-slot="6646434479"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </section>
+
+    <section class="card">
+      <div class="stats">
+        <div class="stat"><span>Điểm</span><strong id="score">0</strong></div>
+        <div class="stat"><span>Kỷ lục</span><strong id="best">0</strong></div>
+        <div class="stat"><span>Xu</span><strong id="coins">0</strong></div>
+        <div class="stat"><span>Skin</span><strong id="skin">Basic</strong></div>
+      </div>
+
+      <canvas id="game" width="640" height="360"></canvas>
+
+      <div class="buttons">
+        <button class="green" id="playBtn">▶ Bắt đầu / Chơi lại</button>
+        <button class="blue" id="jumpBtn">⬆ Nhảy</button>
+        <button class="yellow" id="goldBtn">💰 Gold Skin - 50 xu</button>
+        <button class="orange" id="fireBtn">🔥 Fire Skin - 100 xu</button>
+      </div>
+    </section>
+
+    <section class="card links">
+      <a href="/about.html">About</a> | <a href="/privacy.html">Privacy</a>
+    </section>
   </div>
 
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
 
-  <!-- CONTENT -->
-  <div class="card">
-    <h2>Chơi game online miễn phí</h2>
-    <p>Chào mừng bạn đến với Yah Games. Đây là website chơi game trực tuyến miễn phí, không cần tải về.</p>
-    <p>Bạn có thể chơi các game HTML5 trực tiếp trên trình duyệt.</p>
-  </div>
+const scoreEl = document.getElementById('score');
+const bestEl = document.getElementById('best');
+const coinsEl = document.getElementById('coins');
+const skinEl = document.getElementById('skin');
+const playBtn = document.getElementById('playBtn');
+const jumpBtn = document.getElementById('jumpBtn');
+const goldBtn = document.getElementById('goldBtn');
+const fireBtn = document.getElementById('fireBtn');
 
-  <div class="card">
-    <h2>Game nổi bật</h2>
-    <ul>
-      <li>Coin Runner - game chạy vô tận</li>
-      <li>Mini Jump Game</li>
-      <li>Speed Challenge</li>
-    </ul>
-  </div>
+let coins = Number(localStorage.getItem('coins') || 0);
+let best = Number(localStorage.getItem('best') || 0);
+let skin = localStorage.getItem('skin') || 'Basic';
+let ownedSkins = JSON.parse(localStorage.getItem('ownedSkins') || '["Basic"]');
 
-  <div class="card">
-    <h2>Giới thiệu</h2>
-    <p>Website này được tạo nhằm mục đích giải trí và cung cấp trải nghiệm game đơn giản cho người dùng.</p>
-  </div>
+let state = 'menu';
+let score = 0;
+let speed = 2.3;
+let frame = 0;
+let player = { x: 85, y: 250, w: 34, h: 42, vy: 0, grounded: true };
+let obstacles = [];
+let gameCoins = [];
 
-  <div class="card">
-    <a href="/about.html">About</a> |
-    <a href="/privacy.html">Privacy</a>
-  </div>
+function save() {
+  localStorage.setItem('coins', coins);
+  localStorage.setItem('best', best);
+  localStorage.setItem('skin', skin);
+  localStorage.setItem('ownedSkins', JSON.stringify(ownedSkins));
+}
 
-</div>
+function updateUI() {
+  scoreEl.textContent = Math.floor(score);
+  bestEl.textContent = best;
+  coinsEl.textContent = coins;
+  skinEl.textContent = skin;
+}
 
+function resetGame() {
+  state = 'playing';
+  score = 0;
+  speed = 2.3;
+  frame = 0;
+  player = { x: 85, y: 250, w: 34, h: 42, vy: 0, grounded: true };
+  obstacles = [];
+  gameCoins = [];
+  updateUI();
+}
+
+function gameOver() {
+  state = 'gameover';
+  best = Math.max(best, Math.floor(score));
+  save();
+  updateUI();
+  setTimeout(() => alert('Game Over! Điểm: ' + Math.floor(score)), 50);
+}
+
+function jump() {
+  if (state !== 'playing') {
+    resetGame();
+    return;
+  }
+  if (player.grounded) {
+    player.vy = -11.5;
+    player.grounded = false;
+  }
+}
+
+function buySkin(name, price) {
+  if (ownedSkins.includes(name)) {
+    skin = name;
+    save();
+    updateUI();
+    alert('Đang dùng skin ' + name);
+    return;
+  }
+
+  if (coins < price) {
+    alert('Không đủ xu. Hãy ăn xu vàng trong game.');
+    return;
+  }
+
+  coins -= price;
+  ownedSkins.push(name);
+  skin = name;
+  save();
+  updateUI();
+  alert('Đã mua skin ' + name);
+}
+
+function skinColor() {
+  if (skin === 'Gold') return '#facc15';
+  if (skin === 'Fire') return '#fb923c';
+  return '#22c55e';
+}
+
+function hit(a, b) {
+  return a.x < b.x + b.w &&
+         a.x + a.w > b.x &&
+         a.y < b.y + b.h &&
+         a.y + a.h > b.y;
+}
+
+function drawCoin(c) {
+  ctx.beginPath();
+  ctx.arc(c.x + c.w / 2, c.y + c.h / 2, c.w / 2, 0, Math.PI * 2);
+  ctx.fillStyle = '#facc15';
+  ctx.fill();
+  ctx.strokeStyle = '#92400e';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, 640, 360);
+
+  const bg = ctx.createLinearGradient(0, 0, 0, 360);
+  bg.addColorStop(0, '#38bdf8');
+  bg.addColorStop(0.7, '#0f172a');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, 640, 360);
+
+  ctx.fillStyle = '#166534';
+  ctx.fillRect(0, 292, 640, 68);
+
+  ctx.fillStyle = 'rgba(255,255,255,.2)';
+  for (let x = 0; x < 640; x += 38) {
+    ctx.fillRect(x, 310, 22, 5);
+  }
+
+  ctx.fillStyle = skinColor();
+  ctx.fillRect(player.x, player.y, player.w, player.h);
+  ctx.fillStyle = '#020617';
+  ctx.fillRect(player.x + 22, player.y + 10, 7, 7);
+
+  obstacles.forEach(o => {
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(o.x, o.y, o.w, o.h);
+  });
+
+  gameCoins.forEach(drawCoin);
+
+  ctx.fillStyle = 'white';
+  ctx.font = '900 22px Arial';
+  ctx.fillText('Score: ' + Math.floor(score), 18, 34);
+
+  if (state === 'menu') {
+    ctx.fillStyle = 'rgba(2,6,23,.75)';
+    ctx.fillRect(120, 105, 400, 145);
+    ctx.fillStyle = 'white';
+    ctx.font = '900 32px Arial';
+    ctx.fillText('Coin Runner', 215, 155);
+    ctx.font = '18px Arial';
+    ctx.fillText('Bấm Bắt đầu hoặc Space để chơi', 185, 195);
+  }
+
+  if (state === 'gameover') {
+    ctx.fillStyle = 'rgba(2,6,23,.78)';
+    ctx.fillRect(120, 105, 400, 145);
+    ctx.fillStyle = 'white';
+    ctx.font = '900 32px Arial';
+    ctx.fillText('Game Over', 225, 155);
+    ctx.font = '18px Arial';
+    ctx.fillText('Bấm Chơi lại hoặc Space', 215, 195);
+  }
+}
+
+function updateGame() {
+  if (state === 'playing') {
+    frame++;
+    score += 0.1;
+    speed = Math.min(5, speed + 0.0012);
+
+    player.vy += 0.52;
+    player.y += player.vy;
+
+    if (player.y >= 250) {
+      player.y = 250;
+      player.vy = 0;
+      player.grounded = true;
+    }
+
+    if (frame % 120 === 0) {
+      const h = 28 + Math.random() * 22;
+      obstacles.push({ x: 650, y: 292 - h, w: 26, h });
+    }
+
+    if (frame % 150 === 0) {
+      gameCoins.push({ x: 650, y: 210 + Math.random() * 45, w: 22, h: 22 });
+    }
+
+    obstacles.forEach(o => o.x -= speed);
+    gameCoins.forEach(c => c.x -= speed);
+
+    obstacles = obstacles.filter(o => o.x > -40);
+    gameCoins = gameCoins.filter(c => c.x > -40);
+
+    for (const o of obstacles) {
+      if (hit(player, o)) {
+        gameOver();
+        break;
+      }
+    }
+
+    gameCoins = gameCoins.filter(c => {
+      if (hit(player, c)) {
+        coins += 1;
+        save();
+        updateUI();
+        return false;
+      }
+      return true;
+    });
+
+    updateUI();
+  }
+
+  draw();
+  requestAnimationFrame(updateGame);
+}
+
+playBtn.addEventListener('click', resetGame);
+jumpBtn.addEventListener('click', jump);
+goldBtn.addEventListener('click', () => buySkin('Gold', 50));
+fireBtn.addEventListener('click', () => buySkin('Fire', 100));
+
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    jump();
+  }
+});
+
+updateUI();
+updateGame();
+</script>
 </body>
 </html>
