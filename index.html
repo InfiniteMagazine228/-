@@ -276,7 +276,24 @@ function drawPlumber(p){
 }
 function drawEnemy(e){ if(!e.alive)return; const x=e.x-cameraX,y=e.y; ctx.fillStyle=e.type==='shell'?'#14532d':'#7c2d12'; ctx.fillRect(x,y+8,e.w,e.h-8); ctx.fillStyle=e.type==='shell'?'#22c55e':'#a16207'; ctx.fillRect(x+3,y,e.w-6,14); ctx.fillStyle='white'; ctx.fillRect(x+7,y+12,6,6); ctx.fillRect(x+21,y+12,6,6); ctx.fillStyle='black'; ctx.fillRect(x+9,y+14,3,3); ctx.fillRect(x+23,y+14,3,3); }
 function drawCoin(c){ if(!c.active)return; ctx.beginPath(); ctx.arc(c.x-cameraX+c.w/2,c.y+c.h/2,12,0,Math.PI*2); ctx.fillStyle='#facc15'; ctx.fill(); ctx.strokeStyle='#92400e'; ctx.lineWidth=2; ctx.stroke(); }
-function drawMushroom(m){ if(!m.active)return; const x=m.x-cameraX,y=m.y; ctx.fillStyle='#ef4444'; ctx.fillRect(x,y+4,m.w,m.h/2); ctx.fillStyle='#fff'; ctx.fillRect(x+5,y+7,7,7); ctx.fillRect(x+18,y+7,7,7); ctx.fillStyle='#fed7aa'; ctx.fillRect(x+7,y+18,16,12); ctx.fillStyle='#020617'; ctx.fillRect(x+11,y+22,3,3); ctx.fillRect(x+19,y+22,3,3); }
+function drawMushroom(m){
+  if(!m.active) return;
+  const x=m.x-cameraX,y=m.y;
+  ctx.fillStyle='#ef4444';
+  ctx.fillRect(x,y+4,m.w,m.h/2);
+  ctx.fillStyle='#fff';
+  ctx.fillRect(x+5,y+7,7,7);
+  ctx.fillRect(x+18,y+7,7,7);
+  ctx.fillStyle='#fed7aa';
+  ctx.fillRect(x+7,y+18,16,12);
+  ctx.fillStyle='#020617';
+  ctx.fillRect(x+11,y+22,3,3);
+  ctx.fillRect(x+19,y+22,3,3);
+  if(m.born > 0){
+    ctx.fillStyle='rgba(255,255,255,.55)';
+    ctx.fillRect(x-2,y-2,m.w+4,3);
+  }
+}
 function drawSpike(s){ const x=s.x-cameraX,y=s.y; ctx.fillStyle='#e5e7eb'; ctx.beginPath(); ctx.moveTo(x,y+s.h); ctx.lineTo(x+s.w/2,y); ctx.lineTo(x+s.w,y+s.h); ctx.closePath(); ctx.fill(); ctx.strokeStyle='#64748b'; ctx.stroke(); }
 function drawSpring(s){ const x=s.x-cameraX,y=s.y; ctx.fillStyle='#38bdf8'; ctx.fillRect(x,y+18,s.w,12); ctx.strokeStyle='white'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(x+4,y+18); ctx.lineTo(x+10,y+6); ctx.lineTo(x+18,y+18); ctx.lineTo(x+26,y+6); ctx.lineTo(x+32,y+18); ctx.stroke(); }
 function drawCloud(x,y){ctx.fillStyle='rgba(255,255,255,.85)';ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.arc(x+26,y-12,28,0,Math.PI*2);ctx.arc(x+58,y,22,0,Math.PI*2);ctx.fill();}
@@ -318,8 +335,24 @@ function collideAxis(axis){
   }
 }
 function spawnBlockReward(b){
-  if(b.reward==='mushroom'){ mushrooms.push({x:b.x+8,y:b.y-32,w:30,h:30,vx:1.4,vy:-2,active:true}); score+=100; }
-  else { coinItems.push({x:b.x+10,y:b.y-34,w:24,h:24,vy:-2,active:true}); coins+=3; score+=75; save(); }
+  if(b.reward==='mushroom'){
+    mushrooms.push({
+      x: b.x + (b.w / 2 - 15),
+      y: b.y - 46,
+      w: 30,
+      h: 30,
+      vx: 1.2,
+      vy: -6,
+      active: true,
+      born: 18
+    });
+    score += 100;
+  } else {
+    coinItems.push({x:b.x+10,y:b.y-34,w:24,h:24,vy:-2,active:true});
+    coins += 3;
+    score += 75;
+    save();
+  }
   updateUI();
 }
 function updateMovingPlatforms(){ movingPlatforms.forEach(p=>{ p.x+=p.vx; if(p.x>p.baseX+p.range||p.x<p.baseX-p.range)p.vx*=-1; const stand=player.y+player.h<=p.y+12&&player.y+player.h>=p.y-8&&player.x+player.w>p.x&&player.x<p.x+p.w&&player.vy>=0; if(stand)player.x+=p.vx; }); }
@@ -336,11 +369,57 @@ function updateEnemies(){
 }
 function updateMushrooms(){
   mushrooms.forEach(m=>{
-    if(!m.active)return; m.vy+=GRAVITY; m.x+=m.vx; m.y+=m.vy;
-    for(const s of solids.concat(platforms,movingPlatforms)){ if(rects(m,s)){ if(m.vy>0){m.y=s.y-m.h;m.vy=0;} else m.vx*=-1; } }
-    if(rects(player,m)){ m.active=false; if(!player.big){player.big=true;player.h=60;player.y-=14;} coins+=5; score+=250; save(); updateUI(); }
+    if(!m.active) return;
+
+    // born timer giúp nấm bật ra khỏi block trước khi va chạm với block/platform
+    if(m.born > 0){
+      m.born--;
+      m.y += m.vy;
+      m.vy += 0.25;
+      return;
+    }
+
+    m.vy += GRAVITY;
+    if(m.vy > 12) m.vy = 12;
+
+    m.x += m.vx;
+    for(const s of solids.concat(platforms,movingPlatforms)){
+      if(rects(m,s)){
+        if(m.vx > 0) m.x = s.x - m.w;
+        if(m.vx < 0) m.x = s.x + s.w;
+        m.vx *= -1;
+      }
+    }
+
+    m.y += m.vy;
+    for(const s of solids.concat(platforms,movingPlatforms)){
+      if(rects(m,s)){
+        if(m.vy > 0){
+          m.y = s.y - m.h;
+          m.vy = 0;
+        } else if(m.vy < 0){
+          m.y = s.y + s.h;
+          m.vy = 0;
+        }
+      }
+    }
+
+    // hitbox rộng hơn một chút để ăn nấm dễ hơn
+    const eatBox = {x:m.x-4,y:m.y-4,w:m.w+8,h:m.h+8};
+    if(rects(player,eatBox)){
+      m.active = false;
+      if(!player.big){
+        player.big = true;
+        player.h = 60;
+        player.y -= 14;
+      }
+      coins += 5;
+      score += 250;
+      save();
+      updateUI();
+    }
   });
-  mushrooms=mushrooms.filter(m=>m.active&&m.y<620);
+  mushrooms = mushrooms.filter(m=>m.active && m.y < 620);
 }
 function updateHazards(){
   spikes.forEach(s=>{ if(rects(player,s)){ if(player.big){player.big=false;player.h=46;player.y+=14;player.inv=80;} else loseGame(); } });
