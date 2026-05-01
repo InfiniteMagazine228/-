@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Yah Games - Coin Runner</title>
+  <title>Yah Games - Chơi game miễn phí</title>
+  <meta name="description" content="Yah Games là website chơi game HTML5 miễn phí trên trình duyệt, gồm nhiều mini game vui nhộn như Coin Runner, Tap Box, Snake, Dodge Ball và Reaction Test.">
 
   <!-- Google AdSense: đặt 1 lần trong head -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706"
@@ -11,399 +12,441 @@
 
   <style>
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #0f172a, #020617);
-      color: white;
-      text-align: center;
+      color: #fff;
+      background: radial-gradient(circle at top, #243b8f, #07111f 65%);
       min-height: 100vh;
     }
-
     header {
-      background: #1e293b;
-      padding: 16px;
-      font-size: 26px;
-      font-weight: 900;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(7, 17, 31, .9);
+      backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255,255,255,.12);
     }
-
-    .wrap {
-      width: min(920px, 100%);
+    .nav {
+      width: min(1100px, 100%);
       margin: auto;
       padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
-
-    .card {
-      background: rgba(30, 41, 59, .9);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 18px 50px rgba(0,0,0,.3);
+    .logo { font-size: 26px; font-weight: 900; }
+    .nav a, .nav button {
+      color: #dbeafe;
+      background: transparent;
+      border: 0;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 12px;
     }
-
-    .ad-card {
-      min-height: 100px;
-      overflow: hidden;
+    .wrap {
+      width: min(1100px, 100%);
+      margin: auto;
+      padding: 18px 14px 40px;
     }
-
-    .ad-label {
-      color: #94a3b8;
-      font-size: 12px;
-      margin-bottom: 6px;
-    }
-
-    canvas {
-      width: 100%;
-      max-width: 640px;
-      aspect-ratio: 16 / 9;
-      background: #111827;
-      border-radius: 16px;
-      border: 2px solid rgba(255,255,255,.12);
-      display: block;
-      margin: 0 auto;
-    }
-
-    .buttons {
-      margin-top: 12px;
+    .hero {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 16px;
+      align-items: stretch;
+      margin-bottom: 16px;
     }
-
-    button {
-      border: none;
-      border-radius: 14px;
-      padding: 13px;
+    .card {
+      background: rgba(15, 23, 42, .88);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 22px 60px rgba(0,0,0,.3);
+    }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(32px, 5vw, 56px); }
+    .hero p { color: #cbd5e1; line-height: 1.55; font-size: 17px; }
+    .big-btn {
+      border: 0;
+      border-radius: 16px;
+      padding: 13px 18px;
+      background: #22c55e;
+      color: #052e16;
       font-weight: 900;
       cursor: pointer;
-      font-size: 15px;
+      margin-top: 8px;
     }
-
-    .green { background: #22c55e; color: #052e16; }
-    .blue { background: #38bdf8; color: #082f49; }
-    .yellow { background: #facc15; color: #422006; }
-    .orange { background: #fb923c; color: #431407; }
-
-    .stats {
+    .ad-card { min-height: 110px; overflow: hidden; text-align: center; }
+    .ad-label { color: #94a3b8; font-size: 12px; margin-bottom: 6px; }
+    .grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 12px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
     }
-
+    .game-tile {
+      border: 0;
+      border-radius: 22px;
+      min-height: 150px;
+      color: white;
+      text-align: left;
+      padding: 16px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      box-shadow: 0 18px 40px rgba(0,0,0,.25);
+      transition: transform .15s, filter .15s;
+    }
+    .game-tile:hover { transform: translateY(-3px); filter: brightness(1.08); }
+    .game-tile strong { display: block; font-size: 18px; margin-bottom: 8px; }
+    .game-tile span { color: rgba(255,255,255,.8); font-size: 13px; line-height: 1.35; }
+    .game-area {
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 14px;
+      align-items: start;
+    }
+    canvas {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: block;
+      border-radius: 18px;
+      background: #111827;
+      border: 2px solid rgba(255,255,255,.12);
+    }
+    .side .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
     .stat {
       background: rgba(255,255,255,.08);
-      border-radius: 14px;
-      padding: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 16px;
+      padding: 12px;
     }
-
-    .stat span {
-      display: block;
+    .stat span { color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px; }
+    .stat strong { font-size: 23px; }
+    .control-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 15px;
+      padding: 13px;
+      margin-top: 9px;
+      font-weight: 900;
+      cursor: pointer;
+      background: #38bdf8;
+      color: #082f49;
+    }
+    .green { background: #22c55e; color: #052e16; }
+    .yellow { background: #facc15; color: #422006; }
+    .orange { background: #fb923c; color: #431407; }
+    .ghost { background: rgba(255,255,255,.12); color: white; border: 1px solid rgba(255,255,255,.16); }
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .content p, .content li { color: #cbd5e1; line-height: 1.55; }
+    footer {
+      text-align: center;
       color: #94a3b8;
-      font-size: 12px;
-      margin-bottom: 4px;
+      padding: 24px;
     }
-
-    .stat strong {
-      font-size: 20px;
+    footer a { color: #93c5fd; }
+    @media (max-width: 900px) {
+      .hero, .game-area, .content { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
     }
-
-    .links a { color: #93c5fd; }
-
-    @media (max-width: 600px) {
-      .stats { grid-template-columns: repeat(2, 1fr); }
-      .buttons { grid-template-columns: 1fr; }
+    @media (max-width: 520px) {
+      .grid { grid-template-columns: 1fr; }
+      .nav { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
-  <header>🎮 Yah Games - Coin Runner</header>
+<header>
+  <div class="nav">
+    <div class="logo">🎮 Yah Games</div>
+    <nav>
+      <button onclick="scrollToGames()">Games</button>
+      <a href="/about.html">About</a>
+      <a href="/privacy.html">Privacy</a>
+    </nav>
+  </div>
+</header>
 
-  <div class="wrap">
-    <section class="card">
-      <h2>Chơi game miễn phí</h2>
-      <p>Nhảy để né block đỏ, ăn xu vàng và mua skin. Nhấn Space hoặc nút Nhảy để chơi.</p>
-    </section>
+<div class="wrap">
+  <section class="hero">
+    <div class="card">
+      <h1>Chơi game HTML5 miễn phí</h1>
+      <p>Yah Games có nhiều mini game nhẹ, chạy trực tiếp trên trình duyệt. Không cần tải app, chỉ cần mở web và chơi ngay.</p>
+      <button class="big-btn" onclick="scrollToGames()">Chơi ngay</button>
+    </div>
+    <div class="card">
+      <h2>🔥 Game nổi bật</h2>
+      <p>Coin Runner, Snake, Tap Box, Dodge Ball và Reaction Test. Chơi để lấy điểm cao và thử thách bạn bè.</p>
+    </div>
+  </section>
 
-    <!-- Banner ads: đặt trong body, ngay trên game -->
-    <section class="card ad-card">
-      <div class="ad-label">Quảng cáo</div>
+  <section class="card ad-card">
+    <div class="ad-label">Quảng cáo</div>
+    <!-- ta -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-1057751843910706"
+         data-ad-slot="6646434479"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </section>
 
-      <!-- ta -->
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-1057751843910706"
-           data-ad-slot="6646434479"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </section>
+  <section id="games" class="grid">
+    <button class="game-tile" onclick="selectGame('runner')"><strong>🏃 Coin Runner</strong><span>Nhảy qua block đỏ, ăn xu vàng.</span></button>
+    <button class="game-tile" onclick="selectGame('snake')"><strong>🐍 Snake</strong><span>Ăn thức ăn, đừng đâm vào thân.</span></button>
+    <button class="game-tile" onclick="selectGame('tap')"><strong>🎯 Tap Box</strong><span>Bấm thật nhanh vào hộp xanh.</span></button>
+    <button class="game-tile" onclick="selectGame('dodge')"><strong>🟣 Dodge Ball</strong><span>Né bóng đỏ càng lâu càng tốt.</span></button>
+    <button class="game-tile" onclick="selectGame('reaction')"><strong>⚡ Reaction</strong><span>Test phản xạ khi màn hình đổi màu.</span></button>
+  </section>
 
-    <section class="card">
-      <div class="stats">
+  <section class="game-area">
+    <main class="card">
+      <h2 id="gameTitle">🏃 Coin Runner</h2>
+      <canvas id="game" width="640" height="360"></canvas>
+    </main>
+    <aside class="card side">
+      <div class="stat-grid">
         <div class="stat"><span>Điểm</span><strong id="score">0</strong></div>
         <div class="stat"><span>Kỷ lục</span><strong id="best">0</strong></div>
-        <div class="stat"><span>Xu</span><strong id="coins">0</strong></div>
-        <div class="stat"><span>Skin</span><strong id="skin">Basic</strong></div>
       </div>
+      <button class="control-btn green" onclick="startGame()">▶ Bắt đầu / Chơi lại</button>
+      <button class="control-btn" onclick="mainAction()" id="actionBtn">⬆ Nhảy / Hành động</button>
+      <button class="control-btn ghost" onclick="showHelp()">❔ Cách chơi</button>
+      <p id="helpText" style="color:#cbd5e1;line-height:1.5">Coin Runner: nhấn Space hoặc nút hành động để nhảy qua block đỏ.</p>
+    </aside>
+  </section>
 
-      <canvas id="game" width="640" height="360"></canvas>
+  <section class="content">
+    <div class="card">
+      <h2>Vì sao chơi Yah Games?</h2>
+      <p>Game chạy nhanh, miễn phí, phù hợp điện thoại và máy tính. Các trò chơi được thiết kế đơn giản để ai cũng có thể bắt đầu ngay.</p>
+    </div>
+    <div class="card">
+      <h2>Mẹo chơi</h2>
+      <ul>
+        <li>Chơi mỗi game nhiều lần để phá kỷ lục.</li>
+        <li>Dùng Space trên máy tính để thao tác nhanh.</li>
+        <li>Trên điện thoại, dùng nút hành động bên cạnh game.</li>
+      </ul>
+    </div>
+  </section>
+</div>
 
-      <div class="buttons">
-        <button class="green" id="playBtn">▶ Bắt đầu / Chơi lại</button>
-        <button class="blue" id="jumpBtn">⬆ Nhảy</button>
-        <button class="yellow" id="goldBtn">💰 Gold Skin - 50 xu</button>
-        <button class="orange" id="fireBtn">🔥 Fire Skin - 100 xu</button>
-      </div>
-    </section>
-
-    <section class="card links">
-      <a href="/about.html">About</a> | <a href="/privacy.html">Privacy</a>
-    </section>
-  </div>
+<footer>
+  © 2026 Yah Games · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a>
+</footer>
 
 <script>
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-
 const scoreEl = document.getElementById('score');
 const bestEl = document.getElementById('best');
-const coinsEl = document.getElementById('coins');
-const skinEl = document.getElementById('skin');
-const playBtn = document.getElementById('playBtn');
-const jumpBtn = document.getElementById('jumpBtn');
-const goldBtn = document.getElementById('goldBtn');
-const fireBtn = document.getElementById('fireBtn');
+const gameTitle = document.getElementById('gameTitle');
+const helpText = document.getElementById('helpText');
+const actionBtn = document.getElementById('actionBtn');
 
-let coins = Number(localStorage.getItem('coins') || 0);
-let best = Number(localStorage.getItem('best') || 0);
-let skin = localStorage.getItem('skin') || 'Basic';
-let ownedSkins = JSON.parse(localStorage.getItem('ownedSkins') || '["Basic"]');
-
-let state = 'menu';
+let currentGame = 'runner';
+let running = false;
 let score = 0;
-let speed = 2.3;
+let best = Number(localStorage.getItem('best_runner') || 0);
 let frame = 0;
-let player = { x: 85, y: 250, w: 34, h: 42, vy: 0, grounded: true };
-let obstacles = [];
-let gameCoins = [];
+let data = {};
+let reactionReady = false;
+let reactionStart = 0;
+let reactionTimeout = null;
 
-function save() {
-  localStorage.setItem('coins', coins);
-  localStorage.setItem('best', best);
-  localStorage.setItem('skin', skin);
-  localStorage.setItem('ownedSkins', JSON.stringify(ownedSkins));
-}
+function scrollToGames(){ document.getElementById('games').scrollIntoView({behavior:'smooth'}); }
+function rand(min, max){ return Math.random() * (max - min) + min; }
+function saveBest(){ localStorage.setItem('best_' + currentGame, Math.floor(best)); }
+function loadBest(){ best = Number(localStorage.getItem('best_' + currentGame) || 0); updateUI(); }
+function updateUI(){ scoreEl.textContent = Math.floor(score); bestEl.textContent = Math.floor(best); }
 
-function updateUI() {
-  scoreEl.textContent = Math.floor(score);
-  bestEl.textContent = best;
-  coinsEl.textContent = coins;
-  skinEl.textContent = skin;
-}
-
-function resetGame() {
-  state = 'playing';
+function selectGame(name){
+  currentGame = name;
+  running = false;
   score = 0;
-  speed = 2.3;
+  loadBest();
+  if (reactionTimeout) clearTimeout(reactionTimeout);
+  reactionReady = false;
+  const titles = {
+    runner:'🏃 Coin Runner', snake:'🐍 Snake', tap:'🎯 Tap Box', dodge:'🟣 Dodge Ball', reaction:'⚡ Reaction Test'
+  };
+  const helps = {
+    runner:'Coin Runner: nhấn Space hoặc nút hành động để nhảy qua block đỏ.',
+    snake:'Snake: dùng phím mũi tên để điều khiển rắn ăn thức ăn.',
+    tap:'Tap Box: bấm nút hành động hoặc click vào hộp xanh thật nhanh.',
+    dodge:'Dodge Ball: dùng chuột chạm/kéo hoặc phím mũi tên để né bóng đỏ.',
+    reaction:'Reaction: bấm bắt đầu, chờ màn hình xanh rồi bấm hành động thật nhanh.'
+  };
+  gameTitle.textContent = titles[name];
+  helpText.textContent = helps[name];
+  actionBtn.textContent = name === 'runner' ? '⬆ Nhảy' : name === 'tap' ? '🎯 Tap' : name === 'reaction' ? '⚡ Bấm!' : '🎮 Hành động';
+  drawMenu();
+}
+function showHelp(){ alert(helpText.textContent); }
+
+function startGame(){
+  running = true;
+  score = 0;
   frame = 0;
-  player = { x: 85, y: 250, w: 34, h: 42, vy: 0, grounded: true };
-  obstacles = [];
-  gameCoins = [];
+  if (reactionTimeout) clearTimeout(reactionTimeout);
+  if (currentGame === 'runner') data = {p:{x:80,y:242,w:56,h:50,vy:0,g:true},obs:[],coins:[],speed:2.4};
+  if (currentGame === 'snake') data = {snake:[{x:10,y:10}],dir:{x:1,y:0},food:{x:16,y:10},tick:0,cell:20};
+  if (currentGame === 'tap') data = {box:{x:rand(50,560),y:rand(60,280),w:50,h:50},time:600};
+  if (currentGame === 'dodge') data = {p:{x:310,y:170,w:28,h:28},balls:[],keys:{},speed:3};
+  if (currentGame === 'reaction') startReaction();
   updateUI();
 }
-
-function gameOver() {
-  state = 'gameover';
+function gameOver(){
+  running = false;
   best = Math.max(best, Math.floor(score));
-  save();
+  saveBest();
   updateUI();
-  setTimeout(() => alert('Game Over! Điểm: ' + Math.floor(score)), 50);
 }
-
-function jump() {
-  if (state !== 'playing') {
-    resetGame();
-    return;
-  }
-  if (player.grounded) {
-    player.vy = -11.5;
-    player.grounded = false;
-  }
+function mainAction(){
+  if (!running) { startGame(); return; }
+  if (currentGame === 'runner') runnerJump();
+  if (currentGame === 'tap') tapHit();
+  if (currentGame === 'reaction') reactionHit();
 }
-
-function buySkin(name, price) {
-  if (ownedSkins.includes(name)) {
-    skin = name;
-    save();
-    updateUI();
-    alert('Đang dùng skin ' + name);
-    return;
-  }
-
-  if (coins < price) {
-    alert('Không đủ xu. Hãy ăn xu vàng trong game.');
-    return;
-  }
-
-  coins -= price;
-  ownedSkins.push(name);
-  skin = name;
-  save();
-  updateUI();
-  alert('Đã mua skin ' + name);
-}
-
-function skinColor() {
-  if (skin === 'Gold') return '#facc15';
-  if (skin === 'Fire') return '#fb923c';
-  return '#22c55e';
-}
-
-function hit(a, b) {
-  return a.x < b.x + b.w &&
-         a.x + a.w > b.x &&
-         a.y < b.y + b.h &&
-         a.y + a.h > b.y;
-}
-
-function drawCoin(c) {
-  ctx.beginPath();
-  ctx.arc(c.x + c.w / 2, c.y + c.h / 2, c.w / 2, 0, Math.PI * 2);
-  ctx.fillStyle = '#facc15';
-  ctx.fill();
-  ctx.strokeStyle = '#92400e';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-}
-
-function draw() {
-  ctx.clearRect(0, 0, 640, 360);
-
-  const bg = ctx.createLinearGradient(0, 0, 0, 360);
-  bg.addColorStop(0, '#38bdf8');
-  bg.addColorStop(0.7, '#0f172a');
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, 640, 360);
-
-  ctx.fillStyle = '#166534';
-  ctx.fillRect(0, 292, 640, 68);
-
-  ctx.fillStyle = 'rgba(255,255,255,.2)';
-  for (let x = 0; x < 640; x += 38) {
-    ctx.fillRect(x, 310, 22, 5);
-  }
-
-  ctx.fillStyle = skinColor();
-  ctx.fillRect(player.x, player.y, player.w, player.h);
-  ctx.fillStyle = '#020617';
-  ctx.fillRect(player.x + 22, player.y + 10, 7, 7);
-
-  obstacles.forEach(o => {
-    ctx.fillStyle = '#ef4444';
-    ctx.fillRect(o.x, o.y, o.w, o.h);
-  });
-
-  gameCoins.forEach(drawCoin);
-
-  ctx.fillStyle = 'white';
-  ctx.font = '900 22px Arial';
-  ctx.fillText('Score: ' + Math.floor(score), 18, 34);
-
-  if (state === 'menu') {
-    ctx.fillStyle = 'rgba(2,6,23,.75)';
-    ctx.fillRect(120, 105, 400, 145);
-    ctx.fillStyle = 'white';
-    ctx.font = '900 32px Arial';
-    ctx.fillText('Coin Runner', 215, 155);
-    ctx.font = '18px Arial';
-    ctx.fillText('Bấm Bắt đầu hoặc Space để chơi', 185, 195);
-  }
-
-  if (state === 'gameover') {
-    ctx.fillStyle = 'rgba(2,6,23,.78)';
-    ctx.fillRect(120, 105, 400, 145);
-    ctx.fillStyle = 'white';
-    ctx.font = '900 32px Arial';
-    ctx.fillText('Game Over', 225, 155);
-    ctx.font = '18px Arial';
-    ctx.fillText('Bấm Chơi lại hoặc Space', 215, 195);
-  }
-}
-
-function updateGame() {
-  if (state === 'playing') {
-    frame++;
-    score += 0.1;
-    speed = Math.min(5, speed + 0.0012);
-
-    player.vy += 0.52;
-    player.y += player.vy;
-
-    if (player.y >= 250) {
-      player.y = 250;
-      player.vy = 0;
-      player.grounded = true;
-    }
-
-    if (frame % 120 === 0) {
-      const h = 28 + Math.random() * 22;
-      obstacles.push({ x: 650, y: 292 - h, w: 26, h });
-    }
-
-    if (frame % 150 === 0) {
-      gameCoins.push({ x: 650, y: 210 + Math.random() * 45, w: 22, h: 22 });
-    }
-
-    obstacles.forEach(o => o.x -= speed);
-    gameCoins.forEach(c => c.x -= speed);
-
-    obstacles = obstacles.filter(o => o.x > -40);
-    gameCoins = gameCoins.filter(c => c.x > -40);
-
-    for (const o of obstacles) {
-      if (hit(player, o)) {
-        gameOver();
-        break;
-      }
-    }
-
-    gameCoins = gameCoins.filter(c => {
-      if (hit(player, c)) {
-        coins += 1;
-        save();
-        updateUI();
-        return false;
-      }
-      return true;
-    });
-
-    updateUI();
-  }
-
-  draw();
-  requestAnimationFrame(updateGame);
-}
-
-playBtn.addEventListener('click', resetGame);
-jumpBtn.addEventListener('click', jump);
-goldBtn.addEventListener('click', () => buySkin('Gold', 50));
-fireBtn.addEventListener('click', () => buySkin('Fire', 100));
-
 window.addEventListener('keydown', e => {
-  if (e.code === 'Space') {
-    e.preventDefault();
-    jump();
+  if (e.code === 'Space') { e.preventDefault(); mainAction(); }
+  if (currentGame === 'snake') {
+    if(e.key==='ArrowUp') data.dir={x:0,y:-1};
+    if(e.key==='ArrowDown') data.dir={x:0,y:1};
+    if(e.key==='ArrowLeft') data.dir={x:-1,y:0};
+    if(e.key==='ArrowRight') data.dir={x:1,y:0};
   }
+  if (currentGame === 'dodge' && data.keys) data.keys[e.key] = true;
+});
+window.addEventListener('keyup', e => { if (currentGame === 'dodge' && data.keys) data.keys[e.key] = false; });
+canvas.addEventListener('click', e => { if(currentGame === 'tap') tapHit(); if(currentGame === 'reaction') reactionHit(); });
+canvas.addEventListener('mousemove', e => {
+  if(currentGame !== 'dodge' || !running) return;
+  const r = canvas.getBoundingClientRect();
+  data.p.x = (e.clientX - r.left) * (640 / r.width) - data.p.w/2;
+  data.p.y = (e.clientY - r.top) * (360 / r.height) - data.p.h/2;
 });
 
-updateUI();
-updateGame();
+function runnerJump(){ if(data.p.g){ data.p.vy=-11.5; data.p.g=false; } }
+function updateRunner(){
+  const p=data.p; score+=0.1; data.speed=Math.min(5,data.speed+0.0012); p.vy+=0.52; p.y+=p.vy;
+  if(p.y>=242){p.y=242;p.vy=0;p.g=true;}
+  if(frame%120===0) data.obs.push({x:650,y:264,w:28,h:28});
+  if(frame%150===0) data.coins.push({x:650,y:210,w:22,h:22});
+  data.obs.forEach(o=>o.x-=data.speed); data.coins.forEach(c=>c.x-=data.speed);
+  data.obs=data.obs.filter(o=>o.x>-40); data.coins=data.coins.filter(c=>c.x>-40);
+  data.obs.forEach(o=>{ if(hit(p,o)) gameOver(); });
+  data.coins=data.coins.filter(c=>{ if(hit(p,c)){score+=5;return false;} return true; });
+}
+function drawDino(p){
+  const x = p.x;
+  const y = p.y;
+  ctx.fillStyle = '#22c55e';
+
+  // thân
+  ctx.fillRect(x + 4, y + 16, 34, 22);
+  // đầu
+  ctx.fillRect(x + 26, y + 2, 24, 20);
+  // mõm
+  ctx.fillRect(x + 42, y + 10, 14, 10);
+  // đuôi
+  ctx.fillRect(x - 8, y + 22, 14, 8);
+  // chân
+  ctx.fillRect(x + 10, y + 36, 8, 14);
+  ctx.fillRect(x + 28, y + 36, 8, 14);
+  // tay nhỏ
+  ctx.fillRect(x + 34, y + 24, 10, 5);
+
+  // mắt
+  ctx.fillStyle = '#020617';
+  ctx.fillRect(x + 40, y + 7, 4, 4);
+
+  // bụng sáng
+  ctx.fillStyle = 'rgba(255,255,255,.25)';
+  ctx.fillRect(x + 12, y + 22, 14, 10);
+}
+
+function drawRunner(){
+  bg(); ground(); const p=data.p||{x:80,y:250,w:54,h:50};
+  drawDino(p);
+  (data.obs||[]).forEach(o=>{ctx.fillStyle='#ef4444';ctx.fillRect(o.x,o.y,o.w,o.h);});
+  (data.coins||[]).forEach(c=>{ctx.fillStyle='#facc15';ctx.beginPath();ctx.arc(c.x+11,c.y+11,11,0,Math.PI*2);ctx.fill();});
+}
+function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
+
+function updateSnake(){
+  data.tick++; if(data.tick%10!==0) return; score=data.snake.length-1;
+  const head={x:data.snake[0].x+data.dir.x,y:data.snake[0].y+data.dir.y};
+  if(head.x<0||head.y<0||head.x>=32||head.y>=18||data.snake.some(s=>s.x===head.x&&s.y===head.y)){gameOver();return;}
+  data.snake.unshift(head);
+  if(head.x===data.food.x&&head.y===data.food.y){ data.food={x:Math.floor(rand(0,32)),y:Math.floor(rand(0,18))}; }
+  else data.snake.pop();
+}
+function drawSnake(){ bg(); data.snake.forEach(s=>{ctx.fillStyle='#22c55e';ctx.fillRect(s.x*20+1,s.y*20+1,18,18);}); ctx.fillStyle='#facc15';ctx.fillRect(data.food.x*20+2,data.food.y*20+2,16,16); }
+
+function tapHit(){ if(!running)return; score++; data.box={x:rand(50,560),y:rand(60,280),w:50,h:50}; }
+function updateTap(){ data.time--; if(data.time<=0) gameOver(); }
+function drawTap(){ bg(); ctx.fillStyle='#22c55e'; ctx.fillRect(data.box.x,data.box.y,data.box.w,data.box.h); ctx.fillStyle='white'; ctx.font='22px Arial'; ctx.fillText('Time: '+Math.ceil(data.time/60),20,60); }
+
+function updateDodge(){
+  score+=0.05; const p=data.p;
+  if(data.keys.ArrowUp)p.y-=4;if(data.keys.ArrowDown)p.y+=4;if(data.keys.ArrowLeft)p.x-=4;if(data.keys.ArrowRight)p.x+=4;
+  p.x=Math.max(0,Math.min(612,p.x));p.y=Math.max(0,Math.min(332,p.y));
+  if(frame%55===0)data.balls.push({x:rand(0,620),y:-20,w:24,h:24,vy:rand(2,5)});
+  data.balls.forEach(b=>b.y+=b.vy); data.balls=data.balls.filter(b=>b.y<390);
+  data.balls.forEach(b=>{if(hit(p,b))gameOver();});
+}
+function drawDodge(){ bg(); ctx.fillStyle='#38bdf8';ctx.fillRect(data.p.x,data.p.y,data.p.w,data.p.h); data.balls.forEach(b=>{ctx.fillStyle='#ef4444';ctx.beginPath();ctx.arc(b.x+12,b.y+12,12,0,Math.PI*2);ctx.fill();}); }
+
+function startReaction(){
+  running = true; reactionReady=false; score=0; data={message:'Chờ màu xanh...',color:'#ef4444'};
+  reactionTimeout=setTimeout(()=>{ reactionReady=true; reactionStart=performance.now(); data={message:'BẤM NGAY!',color:'#22c55e'}; }, rand(1200,3500));
+}
+function reactionHit(){
+  if(!running)return;
+  if(!reactionReady){ score=0; gameOver(); return; }
+  score=Math.floor(performance.now()-reactionStart); best = best === 0 ? score : Math.min(best, score); saveBest(); running=false; updateUI();
+}
+function drawReaction(){ ctx.fillStyle=data.color||'#334155';ctx.fillRect(0,0,640,360);ctx.fillStyle='white';ctx.font='900 34px Arial';ctx.fillText(data.message||'Bấm bắt đầu',210,180); }
+
+function bg(){ const g=ctx.createLinearGradient(0,0,0,360);g.addColorStop(0,'#38bdf8');g.addColorStop(1,'#0f172a');ctx.fillStyle=g;ctx.fillRect(0,0,640,360); }
+function ground(){ ctx.fillStyle='#166534';ctx.fillRect(0,292,640,68);ctx.fillStyle='rgba(255,255,255,.2)';for(let x=0;x<640;x+=38)ctx.fillRect(x,310,22,5); }
+function drawMenu(){ bg(); ctx.fillStyle='rgba(2,6,23,.75)';ctx.fillRect(115,105,410,145);ctx.fillStyle='white';ctx.font='900 30px Arial';ctx.fillText('Chọn game và bấm Bắt đầu',145,170); }
+function loop(){
+  frame++;
+  if(running){
+    if(currentGame==='runner') updateRunner();
+    if(currentGame==='snake') updateSnake();
+    if(currentGame==='tap') updateTap();
+    if(currentGame==='dodge') updateDodge();
+    updateUI();
+  }
+  if(currentGame==='runner') drawRunner();
+  if(currentGame==='snake') drawSnake();
+  if(currentGame==='tap') drawTap();
+  if(currentGame==='dodge') drawDodge();
+  if(currentGame==='reaction') drawReaction();
+  ctx.fillStyle='white';ctx.font='900 22px Arial';ctx.fillText('Score: '+Math.floor(score),18,34);
+  if(!running && currentGame!=='reaction') { ctx.fillStyle='rgba(2,6,23,.55)'; ctx.fillRect(0,0,640,360); ctx.fillStyle='white'; ctx.font='900 28px Arial'; ctx.fillText('Bấm Bắt đầu để chơi',190,180); }
+  requestAnimationFrame(loop);
+}
+selectGame('runner');
+loop();
 </script>
 </body>
 </html>
