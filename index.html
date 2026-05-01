@@ -217,7 +217,7 @@ const coinsEl = document.getElementById('coins');
 const levelEl = document.getElementById('level');
 const skinEl = document.getElementById('skin');
 
-const GRAVITY = 0.72;
+const GRAVITY = 0.60;
 const TILE = 48;
 let keys = {};
 let cameraX = 0;
@@ -254,7 +254,7 @@ function makeLevel(){
   flag = {x:3400,y:170,w:26,h:250};
 
   for(let x=0;x<worldWidth;x+=TILE){
-    if(!(x>1180 && x<1360) && !(x>2440 && x<2620)) solids.push({x,y:430,w:TILE,h:110,type:'ground'});
+    if(!(x>1180 && x<1280) && !(x>2440 && x<2540)) solids.push({x,y:430,w:TILE,h:110,type:'ground'});
   }
 
   // pipes / blocks
@@ -264,9 +264,9 @@ function makeLevel(){
 
   // floating platforms
   platforms.push({x:720,y:310,w:220,h:26,type:'brick'});
-  platforms.push({x:1120,y:250,w:180,h:26,type:'brick'});
+  platforms.push({x:1060,y:250,w:260,h:26,type:'brick'});
   platforms.push({x:1880,y:300,w:260,h:26,type:'brick'});
-  platforms.push({x:2320,y:250,w:210,h:26,type:'brick'});
+  platforms.push({x:2260,y:250,w:280,h:26,type:'brick'});
 
   // question blocks
   questionBlocks.push({x:780,y:230,w:44,h:44,used:false});
@@ -375,7 +375,7 @@ function moveAndCollide(){
   const left=keys.ArrowLeft||keys.KeyA, right=keys.ArrowRight||keys.KeyD, jump=keys.Space||keys.KeyW||keys.ArrowUp;
   player.vx = 0;
   if(left){player.vx=-4.2;player.face=-1;} if(right){player.vx=4.2;player.face=1;}
-  if(jump && player.onGround){player.vy=-14;player.onGround=false;}
+  if(jump && player.onGround){player.vy=-17;player.onGround=false;}
   player.vy += GRAVITY; if(player.vy>16)player.vy=16;
 
   player.x += player.vx; collideAxis('x');
