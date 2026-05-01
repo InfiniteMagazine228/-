@@ -3,106 +3,65 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Yah Games - Chơi game miễn phí</title>
-  <meta name="description" content="Yah Games là website chơi game HTML5 miễn phí trên trình duyệt, gồm nhiều mini game vui nhộn như Coin Runner, Tap Box, Snake, Dodge Ball và Reaction Test.">
+  <title>Plumber World - Yah Games</title>
+  <meta name="description" content="Plumber World là game platformer HTML5 miễn phí: chạy, nhảy, ăn xu, mở khóa skin và về đích.">
 
-  <!-- Google AdSense: đặt 1 lần trong head -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706"
-    crossorigin="anonymous"></script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706" crossorigin="anonymous"></script>
 
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      color: #fff;
-      background: radial-gradient(circle at top, #243b8f, #07111f 65%);
+      background: radial-gradient(circle at top, #2563eb, #020617 70%);
+      color: white;
       min-height: 100vh;
     }
     header {
+      background: rgba(2, 6, 23, .9);
+      border-bottom: 1px solid rgba(255,255,255,.12);
       position: sticky;
       top: 0;
-      z-index: 5;
-      background: rgba(7, 17, 31, .9);
+      z-index: 10;
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,.12);
     }
     .nav {
       width: min(1100px, 100%);
       margin: auto;
       padding: 14px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      align-items: center;
+      gap: 10px;
     }
-    .logo { font-size: 26px; font-weight: 900; }
-    .nav a, .nav button {
-      color: #dbeafe;
-      background: transparent;
-      border: 0;
-      font-weight: 800;
-      cursor: pointer;
-      text-decoration: none;
-      margin-left: 12px;
-    }
+    .logo { font-size: 25px; font-weight: 900; }
+    .nav a { color: #bfdbfe; text-decoration: none; font-weight: 800; margin-left: 12px; }
     .wrap {
       width: min(1100px, 100%);
       margin: auto;
-      padding: 18px 14px 40px;
+      padding: 16px 14px 40px;
     }
     .hero {
       display: grid;
-      grid-template-columns: 1.3fr .7fr;
-      gap: 16px;
-      align-items: stretch;
-      margin-bottom: 16px;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      margin-bottom: 14px;
     }
     .card {
       background: rgba(15, 23, 42, .88);
-      border: 1px solid rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.13);
       border-radius: 24px;
-      padding: 18px;
-      box-shadow: 0 22px 60px rgba(0,0,0,.3);
-    }
-    .hero h1 { margin: 0 0 10px; font-size: clamp(32px, 5vw, 56px); }
-    .hero p { color: #cbd5e1; line-height: 1.55; font-size: 17px; }
-    .big-btn {
-      border: 0;
-      border-radius: 16px;
-      padding: 13px 18px;
-      background: #22c55e;
-      color: #052e16;
-      font-weight: 900;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-    .ad-card { min-height: 110px; overflow: hidden; text-align: center; }
-    .ad-label { color: #94a3b8; font-size: 12px; margin-bottom: 6px; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .game-tile {
-      border: 0;
-      border-radius: 22px;
-      min-height: 150px;
-      color: white;
-      text-align: left;
       padding: 16px;
-      cursor: pointer;
-      background: linear-gradient(135deg, #2563eb, #7c3aed);
-      box-shadow: 0 18px 40px rgba(0,0,0,.25);
-      transition: transform .15s, filter .15s;
+      box-shadow: 0 22px 60px rgba(0,0,0,.32);
     }
-    .game-tile:hover { transform: translateY(-3px); filter: brightness(1.08); }
-    .game-tile strong { display: block; font-size: 18px; margin-bottom: 8px; }
-    .game-tile span { color: rgba(255,255,255,.8); font-size: 13px; line-height: 1.35; }
-    .game-area {
+    h1 { margin: 0 0 8px; font-size: clamp(34px, 5vw, 58px); }
+    p, li { color: #cbd5e1; line-height: 1.5; }
+    .ad-card { min-height: 105px; margin-bottom: 14px; text-align: center; overflow: hidden; }
+    .ad-label { color: #94a3b8; font-size: 12px; margin-bottom: 6px; }
+    .game-layout {
       display: grid;
-      grid-template-columns: 1fr 310px;
+      grid-template-columns: 1fr 330px;
       gap: 14px;
       align-items: start;
     }
@@ -110,15 +69,15 @@
       width: 100%;
       aspect-ratio: 16 / 9;
       display: block;
-      border-radius: 18px;
-      background: #111827;
-      border: 2px solid rgba(255,255,255,.12);
+      background: #38bdf8;
+      border-radius: 20px;
+      border: 2px solid rgba(255,255,255,.15);
     }
-    .side .stat-grid {
+    .stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .stat {
       background: rgba(255,255,255,.08);
@@ -126,68 +85,76 @@
       border-radius: 16px;
       padding: 12px;
     }
-    .stat span { color: #94a3b8; font-size: 12px; display: block; margin-bottom: 4px; }
-    .stat strong { font-size: 23px; }
-    .control-btn {
+    .stat span { display: block; color: #94a3b8; font-size: 12px; margin-bottom: 5px; }
+    .stat strong { font-size: 22px; }
+    button {
       width: 100%;
       border: 0;
       border-radius: 15px;
-      padding: 13px;
+      padding: 13px 14px;
       margin-top: 9px;
-      font-weight: 900;
       cursor: pointer;
-      background: #38bdf8;
-      color: #082f49;
+      font-weight: 900;
+      font-size: 15px;
+      transition: transform .12s, filter .12s;
     }
+    button:hover { transform: translateY(-1px); filter: brightness(1.06); }
     .green { background: #22c55e; color: #052e16; }
+    .blue { background: #38bdf8; color: #082f49; }
     .yellow { background: #facc15; color: #422006; }
-    .orange { background: #fb923c; color: #431407; }
+    .red { background: #ef4444; color: white; }
+    .purple { background: #a78bfa; color: #2e1065; }
     .ghost { background: rgba(255,255,255,.12); color: white; border: 1px solid rgba(255,255,255,.16); }
+    .shop-title {
+      margin: 17px 0 7px;
+      color: #dbeafe;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .mobile-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
     .content {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
-      margin-top: 16px;
+      margin-top: 14px;
     }
-    .content p, .content li { color: #cbd5e1; line-height: 1.55; }
-    footer {
-      text-align: center;
-      color: #94a3b8;
-      padding: 24px;
-    }
+    footer { text-align: center; color: #94a3b8; padding: 24px; }
     footer a { color: #93c5fd; }
     @media (max-width: 900px) {
-      .hero, .game-area, .content { grid-template-columns: 1fr; }
-      .grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 520px) {
-      .grid { grid-template-columns: 1fr; }
-      .nav { flex-direction: column; align-items: flex-start; }
+      .hero, .game-layout, .content { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <div class="logo">🎮 Yah Games</div>
-    <nav>
-      <button onclick="scrollToGames()">Games</button>
-      <a href="/about.html">About</a>
-      <a href="/privacy.html">Privacy</a>
-    </nav>
+    <div class="logo">🍄 Plumber World</div>
+    <nav><a href="/about.html">About</a><a href="/privacy.html">Privacy</a></nav>
   </div>
 </header>
 
 <div class="wrap">
   <section class="hero">
     <div class="card">
-      <h1>Chơi game HTML5 miễn phí</h1>
-      <p>Yah Games có nhiều mini game nhẹ, chạy trực tiếp trên trình duyệt. Không cần tải app, chỉ cần mở web và chơi ngay.</p>
-      <button class="big-btn" onclick="scrollToGames()">Chơi ngay</button>
+      <h1>Platformer cổ điển</h1>
+      <p>Chạy, nhảy, ăn xu, mở khóa skin và chạm cờ để thắng màn. Game dùng nhân vật plumber tự vẽ bằng canvas, không cần ảnh ngoài.</p>
+      <p><b>Điều khiển:</b> A/D hoặc ←/→ để đi, Space/W/↑ để nhảy.</p>
     </div>
     <div class="card">
-      <h2>🔥 Game nổi bật</h2>
-      <p>Coin Runner, Snake, Tap Box, Dodge Ball và Reaction Test. Chơi để lấy điểm cao và thử thách bạn bè.</p>
+      <h2>🎯 Mục tiêu</h2>
+      <ul>
+        <li>Ăn coin để mua skin.</li>
+        <li>Đạp lên quái để diệt.</li>
+        <li>Đập block ? để lấy thưởng.</li>
+        <li>Đi tới lá cờ để thắng màn.</li>
+      </ul>
     </div>
   </section>
 
@@ -200,253 +167,279 @@
          data-ad-slot="6646434479"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </section>
 
-  <section id="games" class="grid">
-    <button class="game-tile" onclick="selectGame('runner')"><strong>🏃 Coin Runner</strong><span>Nhảy qua block đỏ, ăn xu vàng.</span></button>
-    <button class="game-tile" onclick="selectGame('snake')"><strong>🐍 Snake</strong><span>Ăn thức ăn, đừng đâm vào thân.</span></button>
-    <button class="game-tile" onclick="selectGame('tap')"><strong>🎯 Tap Box</strong><span>Bấm thật nhanh vào hộp xanh.</span></button>
-    <button class="game-tile" onclick="selectGame('dodge')"><strong>🟣 Dodge Ball</strong><span>Né bóng đỏ càng lâu càng tốt.</span></button>
-    <button class="game-tile" onclick="selectGame('reaction')"><strong>⚡ Reaction</strong><span>Test phản xạ khi màn hình đổi màu.</span></button>
-  </section>
-
-  <section class="game-area">
+  <section class="game-layout">
     <main class="card">
-      <h2 id="gameTitle">🏃 Coin Runner</h2>
-      <canvas id="game" width="640" height="360"></canvas>
-    </main>
-    <aside class="card side">
-      <div class="stat-grid">
-        <div class="stat"><span>Điểm</span><strong id="score">0</strong></div>
-        <div class="stat"><span>Kỷ lục</span><strong id="best">0</strong></div>
+      <canvas id="game" width="960" height="540"></canvas>
+      <div class="mobile-controls">
+        <button class="ghost" id="leftBtn">⬅ Trái</button>
+        <button class="blue" id="jumpBtn">⬆ Nhảy</button>
+        <button class="ghost" id="rightBtn">➡ Phải</button>
       </div>
-      <button class="control-btn green" onclick="startGame()">▶ Bắt đầu / Chơi lại</button>
-      <button class="control-btn" onclick="mainAction()" id="actionBtn">⬆ Nhảy / Hành động</button>
-      <button class="control-btn ghost" onclick="showHelp()">❔ Cách chơi</button>
-      <p id="helpText" style="color:#cbd5e1;line-height:1.5">Coin Runner: nhấn Space hoặc nút hành động để nhảy qua block đỏ.</p>
+    </main>
+
+    <aside class="card">
+      <div class="stats">
+        <div class="stat"><span>Điểm</span><strong id="score">0</strong></div>
+        <div class="stat"><span>Xu</span><strong id="coins">0</strong></div>
+        <div class="stat"><span>Màn</span><strong id="level">1</strong></div>
+        <div class="stat"><span>Skin</span><strong id="skin">Classic</strong></div>
+      </div>
+
+      <button class="green" id="startBtn">▶ Bắt đầu / Chơi lại</button>
+      <button class="blue" id="helpBtn">❔ Cách chơi</button>
+
+      <div class="shop-title">Shop skin</div>
+      <button class="red" id="classicBtn">Classic - Miễn phí</button>
+      <button class="yellow" id="goldBtn">Gold Plumber - 80 xu</button>
+      <button class="purple" id="nightBtn">Night Plumber - 150 xu</button>
+      <button class="green" id="frogBtn">Frog Suit - 220 xu</button>
+
+      <p>Skin đã mua sẽ lưu lại bằng localStorage trên trình duyệt.</p>
     </aside>
   </section>
 
   <section class="content">
-    <div class="card">
-      <h2>Vì sao chơi Yah Games?</h2>
-      <p>Game chạy nhanh, miễn phí, phù hợp điện thoại và máy tính. Các trò chơi được thiết kế đơn giản để ai cũng có thể bắt đầu ngay.</p>
-    </div>
-    <div class="card">
-      <h2>Mẹo chơi</h2>
-      <ul>
-        <li>Chơi mỗi game nhiều lần để phá kỷ lục.</li>
-        <li>Dùng Space trên máy tính để thao tác nhanh.</li>
-        <li>Trên điện thoại, dùng nút hành động bên cạnh game.</li>
-      </ul>
-    </div>
+    <div class="card"><h2>Game có gì?</h2><p>Plumber World là game platformer nhẹ, chạy trực tiếp trong HTML Canvas. Không cần tải app và chơi được trên máy tính lẫn điện thoại.</p></div>
+    <div class="card"><h2>Mẹo chơi</h2><p>Canh nhảy lên đầu quái để diệt. Block dấu hỏi có thể cho xu. Đừng rơi xuống vực và đừng chạm ngang vào quái.</p></div>
   </section>
 </div>
 
-<footer>
-  © 2026 Yah Games · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a>
-</footer>
+<footer>© 2026 Yah Games · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a></footer>
 
 <script>
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const scoreEl = document.getElementById('score');
-const bestEl = document.getElementById('best');
-const gameTitle = document.getElementById('gameTitle');
-const helpText = document.getElementById('helpText');
-const actionBtn = document.getElementById('actionBtn');
+const coinsEl = document.getElementById('coins');
+const levelEl = document.getElementById('level');
+const skinEl = document.getElementById('skin');
 
-let currentGame = 'runner';
-let running = false;
+const GRAVITY = 0.72;
+const TILE = 48;
+let keys = {};
+let cameraX = 0;
 let score = 0;
-let best = Number(localStorage.getItem('best_runner') || 0);
-let frame = 0;
-let data = {};
-let reactionReady = false;
-let reactionStart = 0;
-let reactionTimeout = null;
+let level = 1;
+let coins = Number(localStorage.getItem('plumberCoins') || 0);
+let skin = localStorage.getItem('plumberSkin') || 'Classic';
+let owned = JSON.parse(localStorage.getItem('plumberOwned') || '["Classic"]');
+let state = 'menu';
 
-function scrollToGames(){ document.getElementById('games').scrollIntoView({behavior:'smooth'}); }
-function rand(min, max){ return Math.random() * (max - min) + min; }
-function saveBest(){ localStorage.setItem('best_' + currentGame, Math.floor(best)); }
-function loadBest(){ best = Number(localStorage.getItem('best_' + currentGame) || 0); updateUI(); }
-function updateUI(){ scoreEl.textContent = Math.floor(score); bestEl.textContent = Math.floor(best); }
+let player, solids, questionBlocks, coinItems, enemies, platforms, flag, worldWidth;
 
-function selectGame(name){
-  currentGame = name;
-  running = false;
-  score = 0;
-  loadBest();
-  if (reactionTimeout) clearTimeout(reactionTimeout);
-  reactionReady = false;
-  const titles = {
-    runner:'🏃 Coin Runner', snake:'🐍 Snake', tap:'🎯 Tap Box', dodge:'🟣 Dodge Ball', reaction:'⚡ Reaction Test'
-  };
-  const helps = {
-    runner:'Coin Runner: nhấn Space hoặc nút hành động để nhảy qua block đỏ.',
-    snake:'Snake: dùng phím mũi tên để điều khiển rắn ăn thức ăn.',
-    tap:'Tap Box: bấm nút hành động hoặc click vào hộp xanh thật nhanh.',
-    dodge:'Dodge Ball: dùng chuột chạm/kéo hoặc phím mũi tên để né bóng đỏ.',
-    reaction:'Reaction: bấm bắt đầu, chờ màn hình xanh rồi bấm hành động thật nhanh.'
-  };
-  gameTitle.textContent = titles[name];
-  helpText.textContent = helps[name];
-  actionBtn.textContent = name === 'runner' ? '⬆ Nhảy' : name === 'tap' ? '🎯 Tap' : name === 'reaction' ? '⚡ Bấm!' : '🎮 Hành động';
-  drawMenu();
+function save(){
+  localStorage.setItem('plumberCoins', coins);
+  localStorage.setItem('plumberSkin', skin);
+  localStorage.setItem('plumberOwned', JSON.stringify(owned));
 }
-function showHelp(){ alert(helpText.textContent); }
+function updateUI(){
+  scoreEl.textContent = score;
+  coinsEl.textContent = coins;
+  levelEl.textContent = level;
+  skinEl.textContent = skin;
+}
+function rects(a,b){ return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y; }
 
-function startGame(){
-  running = true;
-  score = 0;
-  frame = 0;
-  if (reactionTimeout) clearTimeout(reactionTimeout);
-  if (currentGame === 'runner') data = {p:{x:80,y:242,w:56,h:50,vy:0,g:true},obs:[],coins:[],speed:2.4};
-  if (currentGame === 'snake') data = {snake:[{x:10,y:10}],dir:{x:1,y:0},food:{x:16,y:10},tick:0,cell:20};
-  if (currentGame === 'tap') data = {box:{x:rand(50,560),y:rand(60,280),w:50,h:50},time:600};
-  if (currentGame === 'dodge') data = {p:{x:310,y:170,w:28,h:28},balls:[],keys:{},speed:3};
-  if (currentGame === 'reaction') startReaction();
-  updateUI();
-}
-function gameOver(){
-  running = false;
-  best = Math.max(best, Math.floor(score));
-  saveBest();
-  updateUI();
-}
-function mainAction(){
-  if (!running) { startGame(); return; }
-  if (currentGame === 'runner') runnerJump();
-  if (currentGame === 'tap') tapHit();
-  if (currentGame === 'reaction') reactionHit();
-}
-window.addEventListener('keydown', e => {
-  if (e.code === 'Space') { e.preventDefault(); mainAction(); }
-  if (currentGame === 'snake') {
-    if(e.key==='ArrowUp') data.dir={x:0,y:-1};
-    if(e.key==='ArrowDown') data.dir={x:0,y:1};
-    if(e.key==='ArrowLeft') data.dir={x:-1,y:0};
-    if(e.key==='ArrowRight') data.dir={x:1,y:0};
+function makeLevel(){
+  worldWidth = 3600;
+  player = {x:90,y:260,w:34,h:46,vx:0,vy:0,onGround:false,face:1,inv:0};
+  solids = [];
+  questionBlocks = [];
+  coinItems = [];
+  enemies = [];
+  platforms = [];
+  flag = {x:3400,y:170,w:26,h:250};
+
+  for(let x=0;x<worldWidth;x+=TILE){
+    if(!(x>1180 && x<1360) && !(x>2440 && x<2620)) solids.push({x,y:430,w:TILE,h:110,type:'ground'});
   }
-  if (currentGame === 'dodge' && data.keys) data.keys[e.key] = true;
-});
-window.addEventListener('keyup', e => { if (currentGame === 'dodge' && data.keys) data.keys[e.key] = false; });
-canvas.addEventListener('click', e => { if(currentGame === 'tap') tapHit(); if(currentGame === 'reaction') reactionHit(); });
-canvas.addEventListener('mousemove', e => {
-  if(currentGame !== 'dodge' || !running) return;
-  const r = canvas.getBoundingClientRect();
-  data.p.x = (e.clientX - r.left) * (640 / r.width) - data.p.w/2;
-  data.p.y = (e.clientY - r.top) * (360 / r.height) - data.p.h/2;
-});
 
-function runnerJump(){ if(data.p.g){ data.p.vy=-11.5; data.p.g=false; } }
-function updateRunner(){
-  const p=data.p; score+=0.1; data.speed=Math.min(5,data.speed+0.0012); p.vy+=0.52; p.y+=p.vy;
-  if(p.y>=242){p.y=242;p.vy=0;p.g=true;}
-  if(frame%120===0) data.obs.push({x:650,y:264,w:28,h:28});
-  if(frame%150===0) data.coins.push({x:650,y:210,w:22,h:22});
-  data.obs.forEach(o=>o.x-=data.speed); data.coins.forEach(c=>c.x-=data.speed);
-  data.obs=data.obs.filter(o=>o.x>-40); data.coins=data.coins.filter(c=>c.x>-40);
-  data.obs.forEach(o=>{ if(hit(p,o)) gameOver(); });
-  data.coins=data.coins.filter(c=>{ if(hit(p,c)){score+=5;return false;} return true; });
+  // pipes / blocks
+  solids.push({x:520,y:350,w:80,h:80,type:'pipe'});
+  solids.push({x:1620,y:350,w:100,h:80,type:'pipe'});
+  solids.push({x:2850,y:350,w:90,h:80,type:'pipe'});
+
+  // floating platforms
+  platforms.push({x:720,y:310,w:220,h:26,type:'brick'});
+  platforms.push({x:1120,y:250,w:180,h:26,type:'brick'});
+  platforms.push({x:1880,y:300,w:260,h:26,type:'brick'});
+  platforms.push({x:2320,y:250,w:210,h:26,type:'brick'});
+
+  // question blocks
+  questionBlocks.push({x:780,y:230,w:44,h:44,used:false});
+  questionBlocks.push({x:1220,y:170,w:44,h:44,used:false});
+  questionBlocks.push({x:1960,y:220,w:44,h:44,used:false});
+  questionBlocks.push({x:2380,y:170,w:44,h:44,used:false});
+
+  enemies.push({x:680,y:394,w:34,h:36,vx:-1.1,alive:true});
+  enemies.push({x:1480,y:394,w:34,h:36,vx:-1.2,alive:true});
+  enemies.push({x:2050,y:394,w:34,h:36,vx:-1.4,alive:true});
+  enemies.push({x:3000,y:394,w:34,h:36,vx:-1.4,alive:true});
+
+  // loose coins
+  for(let i=0;i<18;i++) coinItems.push({x:360+i*150,y:270-rand(0,90),w:24,h:24,vy:0,active:true});
 }
-function drawDino(p){
-  const x = p.x;
-  const y = p.y;
-  ctx.fillStyle = '#22c55e';
+function rand(a,b){return Math.random()*(b-a)+a;}
 
-  // thân
-  ctx.fillRect(x + 4, y + 16, 34, 22);
-  // đầu
-  ctx.fillRect(x + 26, y + 2, 24, 20);
-  // mõm
-  ctx.fillRect(x + 42, y + 10, 14, 10);
-  // đuôi
-  ctx.fillRect(x - 8, y + 22, 14, 8);
-  // chân
-  ctx.fillRect(x + 10, y + 36, 8, 14);
-  ctx.fillRect(x + 28, y + 36, 8, 14);
-  // tay nhỏ
-  ctx.fillRect(x + 34, y + 24, 10, 5);
+function startGame(){ state='playing'; score=0; cameraX=0; makeLevel(); updateUI(); }
+function winGame(){ state='win'; score += 500; level++; updateUI(); }
+function loseGame(){ state='dead'; updateUI(); }
 
-  // mắt
-  ctx.fillStyle = '#020617';
-  ctx.fillRect(x + 40, y + 7, 4, 4);
-
-  // bụng sáng
-  ctx.fillStyle = 'rgba(255,255,255,.25)';
-  ctx.fillRect(x + 12, y + 22, 14, 10);
+function buySkin(name, price){
+  if(owned.includes(name)){ skin=name; save(); updateUI(); return alert('Đang dùng '+name); }
+  if(coins < price) return alert('Không đủ xu. Hãy ăn thêm coin trong game.');
+  coins -= price; owned.push(name); skin=name; save(); updateUI(); alert('Đã mua '+name+'!');
 }
 
-function drawRunner(){
-  bg(); ground(); const p=data.p||{x:80,y:250,w:54,h:50};
-  drawDino(p);
-  (data.obs||[]).forEach(o=>{ctx.fillStyle='#ef4444';ctx.fillRect(o.x,o.y,o.w,o.h);});
-  (data.coins||[]).forEach(c=>{ctx.fillStyle='#facc15';ctx.beginPath();ctx.arc(c.x+11,c.y+11,11,0,Math.PI*2);ctx.fill();});
+function skinPalette(){
+  if(skin==='Gold') return {hat:'#facc15',shirt:'#eab308',pants:'#92400e',skin:'#fed7aa'};
+  if(skin==='Night') return {hat:'#7c3aed',shirt:'#312e81',pants:'#111827',skin:'#e9d5ff'};
+  if(skin==='Frog') return {hat:'#16a34a',shirt:'#22c55e',pants:'#166534',skin:'#bbf7d0'};
+  return {hat:'#ef4444',shirt:'#2563eb',pants:'#1d4ed8',skin:'#fed7aa'};
 }
-function hit(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
 
-function updateSnake(){
-  data.tick++; if(data.tick%10!==0) return; score=data.snake.length-1;
-  const head={x:data.snake[0].x+data.dir.x,y:data.snake[0].y+data.dir.y};
-  if(head.x<0||head.y<0||head.x>=32||head.y>=18||data.snake.some(s=>s.x===head.x&&s.y===head.y)){gameOver();return;}
-  data.snake.unshift(head);
-  if(head.x===data.food.x&&head.y===data.food.y){ data.food={x:Math.floor(rand(0,32)),y:Math.floor(rand(0,18))}; }
-  else data.snake.pop();
+function drawPlumber(p){
+  const pal = skinPalette();
+  const x = Math.floor(p.x-cameraX), y = Math.floor(p.y);
+  ctx.save();
+  if(p.face < 0){ ctx.translate(x+p.w/2,y); ctx.scale(-1,1); ctx.translate(-(x+p.w/2),-y); }
+  // legs
+  ctx.fillStyle = pal.pants; ctx.fillRect(x+7,y+32,8,16); ctx.fillRect(x+21,y+32,8,16);
+  // body
+  ctx.fillStyle = pal.shirt; ctx.fillRect(x+5,y+18,25,19);
+  // head
+  ctx.fillStyle = pal.skin; ctx.fillRect(x+7,y+6,23,17);
+  // hat
+  ctx.fillStyle = pal.hat; ctx.fillRect(x+4,y+1,27,8); ctx.fillRect(x+18,y+8,17,5);
+  // eye / moustache
+  ctx.fillStyle = '#020617'; ctx.fillRect(x+23,y+11,4,4); ctx.fillRect(x+20,y+18,12,4);
+  // arm
+  ctx.fillStyle = pal.skin; ctx.fillRect(x+29,y+22,8,10);
+  ctx.restore();
 }
-function drawSnake(){ bg(); data.snake.forEach(s=>{ctx.fillStyle='#22c55e';ctx.fillRect(s.x*20+1,s.y*20+1,18,18);}); ctx.fillStyle='#facc15';ctx.fillRect(data.food.x*20+2,data.food.y*20+2,16,16); }
 
-function tapHit(){ if(!running)return; score++; data.box={x:rand(50,560),y:rand(60,280),w:50,h:50}; }
-function updateTap(){ data.time--; if(data.time<=0) gameOver(); }
-function drawTap(){ bg(); ctx.fillStyle='#22c55e'; ctx.fillRect(data.box.x,data.box.y,data.box.w,data.box.h); ctx.fillStyle='white'; ctx.font='22px Arial'; ctx.fillText('Time: '+Math.ceil(data.time/60),20,60); }
-
-function updateDodge(){
-  score+=0.05; const p=data.p;
-  if(data.keys.ArrowUp)p.y-=4;if(data.keys.ArrowDown)p.y+=4;if(data.keys.ArrowLeft)p.x-=4;if(data.keys.ArrowRight)p.x+=4;
-  p.x=Math.max(0,Math.min(612,p.x));p.y=Math.max(0,Math.min(332,p.y));
-  if(frame%55===0)data.balls.push({x:rand(0,620),y:-20,w:24,h:24,vy:rand(2,5)});
-  data.balls.forEach(b=>b.y+=b.vy); data.balls=data.balls.filter(b=>b.y<390);
-  data.balls.forEach(b=>{if(hit(p,b))gameOver();});
+function drawEnemy(e){
+  if(!e.alive) return;
+  const x=e.x-cameraX,y=e.y;
+  ctx.fillStyle='#7c2d12'; ctx.fillRect(x,y+8,e.w,e.h-8);
+  ctx.fillStyle='#a16207'; ctx.fillRect(x+3,y,e.w-6,14);
+  ctx.fillStyle='white'; ctx.fillRect(x+7,y+12,6,6); ctx.fillRect(x+21,y+12,6,6);
+  ctx.fillStyle='black'; ctx.fillRect(x+9,y+14,3,3); ctx.fillRect(x+23,y+14,3,3);
 }
-function drawDodge(){ bg(); ctx.fillStyle='#38bdf8';ctx.fillRect(data.p.x,data.p.y,data.p.w,data.p.h); data.balls.forEach(b=>{ctx.fillStyle='#ef4444';ctx.beginPath();ctx.arc(b.x+12,b.y+12,12,0,Math.PI*2);ctx.fill();}); }
-
-function startReaction(){
-  running = true; reactionReady=false; score=0; data={message:'Chờ màu xanh...',color:'#ef4444'};
-  reactionTimeout=setTimeout(()=>{ reactionReady=true; reactionStart=performance.now(); data={message:'BẤM NGAY!',color:'#22c55e'}; }, rand(1200,3500));
+function drawCoin(c){
+  if(!c.active) return;
+  ctx.beginPath(); ctx.arc(c.x-cameraX+c.w/2,c.y+c.h/2,12,0,Math.PI*2);
+  ctx.fillStyle='#facc15'; ctx.fill(); ctx.strokeStyle='#92400e'; ctx.lineWidth=2; ctx.stroke();
 }
-function reactionHit(){
-  if(!running)return;
-  if(!reactionReady){ score=0; gameOver(); return; }
-  score=Math.floor(performance.now()-reactionStart); best = best === 0 ? score : Math.min(best, score); saveBest(); running=false; updateUI();
-}
-function drawReaction(){ ctx.fillStyle=data.color||'#334155';ctx.fillRect(0,0,640,360);ctx.fillStyle='white';ctx.font='900 34px Arial';ctx.fillText(data.message||'Bấm bắt đầu',210,180); }
 
-function bg(){ const g=ctx.createLinearGradient(0,0,0,360);g.addColorStop(0,'#38bdf8');g.addColorStop(1,'#0f172a');ctx.fillStyle=g;ctx.fillRect(0,0,640,360); }
-function ground(){ ctx.fillStyle='#166534';ctx.fillRect(0,292,640,68);ctx.fillStyle='rgba(255,255,255,.2)';for(let x=0;x<640;x+=38)ctx.fillRect(x,310,22,5); }
-function drawMenu(){ bg(); ctx.fillStyle='rgba(2,6,23,.75)';ctx.fillRect(115,105,410,145);ctx.fillStyle='white';ctx.font='900 30px Arial';ctx.fillText('Chọn game và bấm Bắt đầu',145,170); }
-function loop(){
-  frame++;
-  if(running){
-    if(currentGame==='runner') updateRunner();
-    if(currentGame==='snake') updateSnake();
-    if(currentGame==='tap') updateTap();
-    if(currentGame==='dodge') updateDodge();
-    updateUI();
+function drawWorld(){
+  // sky
+  const g=ctx.createLinearGradient(0,0,0,540); g.addColorStop(0,'#38bdf8'); g.addColorStop(.75,'#60a5fa'); g.addColorStop(1,'#166534'); ctx.fillStyle=g; ctx.fillRect(0,0,960,540);
+  // clouds
+  for(let i=0;i<8;i++){ let x=(i*440 - cameraX*0.25)%1200; if(x< -100)x+=1200; drawCloud(x,70+(i%3)*35); }
+  // hills
+  ctx.fillStyle='rgba(22,101,52,.45)';
+  for(let i=0;i<6;i++){ let x=i*650-cameraX*.4; ctx.beginPath(); ctx.arc(x+180,430,170,Math.PI,0); ctx.fill(); }
+  // solids
+  solids.forEach(s=>drawSolid(s)); platforms.forEach(s=>drawSolid(s)); questionBlocks.forEach(drawQuestion);
+  coinItems.forEach(drawCoin); enemies.forEach(drawEnemy);
+  // flag
+  ctx.fillStyle='#713f12'; ctx.fillRect(flag.x-cameraX,flag.y,8,flag.h);
+  ctx.fillStyle='#22c55e'; ctx.fillRect(flag.x-cameraX+8,flag.y+10,70,42);
+  ctx.fillStyle='white'; ctx.font='900 20px Arial'; ctx.fillText('GO!',flag.x-cameraX+20,flag.y+38);
+  drawPlumber(player);
+  // HUD
+  ctx.fillStyle='rgba(2,6,23,.55)'; ctx.fillRect(16,14,250,48);
+  ctx.fillStyle='white'; ctx.font='900 22px Arial'; ctx.fillText('Score '+score+'   Coins '+coins,30,45);
+  if(state==='menu') centerText('Plumber World','Bấm Bắt đầu để chơi');
+  if(state==='dead') centerText('Game Over','Bấm Chơi lại để thử tiếp');
+  if(state==='win') centerText('Bạn đã thắng!','Bấm Chơi lại để chơi màn mới');
+}
+function drawCloud(x,y){ctx.fillStyle='rgba(255,255,255,.85)';ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.arc(x+26,y-12,28,0,Math.PI*2);ctx.arc(x+58,y,22,0,Math.PI*2);ctx.fill();}
+function drawSolid(s){
+  const x=s.x-cameraX; if(x<-80||x>1040)return;
+  if(s.type==='pipe'){ctx.fillStyle='#15803d';ctx.fillRect(x,s.y,s.w,s.h);ctx.fillStyle='#22c55e';ctx.fillRect(x-8,s.y,s.w+16,20);return;}
+  ctx.fillStyle=s.type==='brick'?'#b45309':'#166534'; ctx.fillRect(x,s.y,s.w,s.h);
+  ctx.strokeStyle='rgba(0,0,0,.18)'; ctx.strokeRect(x,s.y,s.w,s.h);
+}
+function drawQuestion(b){
+  const x=b.x-cameraX; ctx.fillStyle=b.used?'#78716c':'#facc15'; ctx.fillRect(x,b.y,b.w,b.h); ctx.strokeStyle='#92400e'; ctx.strokeRect(x,b.y,b.w,b.h); ctx.fillStyle='#422006'; ctx.font='900 28px Arial'; ctx.fillText(b.used?'': '?',x+13,b.y+32);
+}
+function centerText(a,b){ctx.fillStyle='rgba(2,6,23,.72)';ctx.fillRect(250,170,460,160);ctx.fillStyle='white';ctx.font='900 42px Arial';ctx.textAlign='center';ctx.fillText(a,480,230);ctx.font='21px Arial';ctx.fillText(b,480,275);ctx.textAlign='left';}
+
+function moveAndCollide(){
+  // input
+  const left=keys.ArrowLeft||keys.KeyA, right=keys.ArrowRight||keys.KeyD, jump=keys.Space||keys.KeyW||keys.ArrowUp;
+  player.vx = 0;
+  if(left){player.vx=-4.2;player.face=-1;} if(right){player.vx=4.2;player.face=1;}
+  if(jump && player.onGround){player.vy=-14;player.onGround=false;}
+  player.vy += GRAVITY; if(player.vy>16)player.vy=16;
+
+  player.x += player.vx; collideAxis('x');
+  player.y += player.vy; player.onGround=false; collideAxis('y');
+
+  if(player.y>620) loseGame();
+  cameraX = Math.max(0, Math.min(worldWidth-960, player.x-360));
+}
+function allBlocks(){ return solids.concat(platforms).concat(questionBlocks); }
+function collideAxis(axis){
+  for(const b of allBlocks()){
+    if(!rects(player,b)) continue;
+    if(axis==='x'){
+      if(player.vx>0) player.x=b.x-player.w;
+      if(player.vx<0) player.x=b.x+b.w;
+    } else {
+      if(player.vy>0){ player.y=b.y-player.h; player.vy=0; player.onGround=true; }
+      if(player.vy<0){
+        player.y=b.y+b.h; player.vy=0;
+        if(questionBlocks.includes(b) && !b.used){ b.used=true; spawnBlockReward(b); }
+      }
+    }
   }
-  if(currentGame==='runner') drawRunner();
-  if(currentGame==='snake') drawSnake();
-  if(currentGame==='tap') drawTap();
-  if(currentGame==='dodge') drawDodge();
-  if(currentGame==='reaction') drawReaction();
-  ctx.fillStyle='white';ctx.font='900 22px Arial';ctx.fillText('Score: '+Math.floor(score),18,34);
-  if(!running && currentGame!=='reaction') { ctx.fillStyle='rgba(2,6,23,.55)'; ctx.fillRect(0,0,640,360); ctx.fillStyle='white'; ctx.font='900 28px Arial'; ctx.fillText('Bấm Bắt đầu để chơi',190,180); }
-  requestAnimationFrame(loop);
 }
-selectGame('runner');
-loop();
+function spawnBlockReward(b){ coinItems.push({x:b.x+10,y:b.y-32,w:24,h:24,vy:-2,active:true}); score += 50; }
+function updateEnemies(){
+  enemies.forEach(e=>{
+    if(!e.alive) return;
+    e.x += e.vx;
+    let front = {x:e.vx<0?e.x-2:e.x+e.w+2,y:e.y+e.h+4,w:4,h:4};
+    let hasGround = solids.concat(platforms).some(s=>rects(front,s));
+    if(!hasGround) e.vx *= -1;
+    for(const s of solids.concat(platforms)){ if(rects(e,s)){ e.vx*=-1; e.x+=e.vx*4; } }
+    if(rects(player,e)){
+      if(player.vy>0 && player.y+player.h-e.y<18){ e.alive=false; player.vy=-9; score+=100; }
+      else if(player.inv<=0){ loseGame(); }
+    }
+  });
+}
+function updateCoins(){
+  coinItems.forEach(c=>{ if(!c.active)return; if(rects(player,c)){c.active=false; coins++; score+=25; save(); updateUI();} });
+  coinItems=coinItems.filter(c=>c.active);
+}
+function updateGame(){
+  if(state==='playing'){
+    moveAndCollide(); updateEnemies(); updateCoins();
+    if(rects(player,flag)) winGame();
+  }
+  drawWorld();
+  requestAnimationFrame(updateGame);
+}
+
+window.addEventListener('keydown',e=>{keys[e.code]=true;if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();});
+window.addEventListener('keyup',e=>keys[e.code]=false);
+function hold(btn,code){btn.addEventListener('pointerdown',()=>keys[code]=true);btn.addEventListener('pointerup',()=>keys[code]=false);btn.addEventListener('pointerleave',()=>keys[code]=false);}
+hold(document.getElementById('leftBtn'),'ArrowLeft'); hold(document.getElementById('rightBtn'),'ArrowRight'); hold(document.getElementById('jumpBtn'),'Space');
+document.getElementById('startBtn').onclick=startGame;
+document.getElementById('helpBtn').onclick=()=>alert('Đi trái/phải bằng A/D hoặc mũi tên. Nhảy bằng Space/W/↑. Đập block ? từ dưới, ăn coin, đạp đầu quái và tới cờ để thắng.');
+document.getElementById('classicBtn').onclick=()=>buySkin('Classic',0);
+document.getElementById('goldBtn').onclick=()=>buySkin('Gold',80);
+document.getElementById('nightBtn').onclick=()=>buySkin('Night',150);
+document.getElementById('frogBtn').onclick=()=>buySkin('Frog',220);
+
+makeLevel(); updateUI(); updateGame();
 </script>
 </body>
 </html>
