@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Plumber World - Yah Games</title>
-  <meta name="description" content="Plumber World là game platformer HTML5 miễn phí: chạy, nhảy, ăn xu, mở khóa skin và về đích.">
+  <meta name="description" content="Plumber World là game platformer HTML5 miễn phí: chạy, nhảy, ăn xu, ăn nấm, qua level 0 đến 20 và mở khóa skin.">
 
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706" crossorigin="anonymous"></script>
@@ -19,7 +19,7 @@
       min-height: 100vh;
     }
     header {
-      background: rgba(2, 6, 23, .9);
+      background: rgba(2, 6, 23, .92);
       border-bottom: 1px solid rgba(255,255,255,.12);
       position: sticky;
       top: 0;
@@ -37,17 +37,8 @@
     }
     .logo { font-size: 25px; font-weight: 900; }
     .nav a { color: #bfdbfe; text-decoration: none; font-weight: 800; margin-left: 12px; }
-    .wrap {
-      width: min(1100px, 100%);
-      margin: auto;
-      padding: 16px 14px 40px;
-    }
-    .hero {
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
+    .wrap { width: min(1100px, 100%); margin: auto; padding: 16px 14px 40px; }
+    .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 14px; margin-bottom: 14px; }
     .card {
       background: rgba(15, 23, 42, .88);
       border: 1px solid rgba(255,255,255,.13);
@@ -59,12 +50,7 @@
     p, li { color: #cbd5e1; line-height: 1.5; }
     .ad-card { min-height: 105px; margin-bottom: 14px; text-align: center; overflow: hidden; }
     .ad-label { color: #94a3b8; font-size: 12px; margin-bottom: 6px; }
-    .game-layout {
-      display: grid;
-      grid-template-columns: 1fr 330px;
-      gap: 14px;
-      align-items: start;
-    }
+    .game-layout { display: grid; grid-template-columns: 1fr 330px; gap: 14px; align-items: start; }
     canvas {
       width: 100%;
       aspect-ratio: 16 / 9;
@@ -73,30 +59,13 @@
       border-radius: 20px;
       border: 2px solid rgba(255,255,255,.15);
     }
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .stat {
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 16px;
-      padding: 12px;
-    }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .stat { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 12px; }
     .stat span { display: block; color: #94a3b8; font-size: 12px; margin-bottom: 5px; }
     .stat strong { font-size: 22px; }
     button {
-      width: 100%;
-      border: 0;
-      border-radius: 15px;
-      padding: 13px 14px;
-      margin-top: 9px;
-      cursor: pointer;
-      font-weight: 900;
-      font-size: 15px;
-      transition: transform .12s, filter .12s;
+      width: 100%; border: 0; border-radius: 15px; padding: 13px 14px; margin-top: 9px;
+      cursor: pointer; font-weight: 900; font-size: 15px; transition: transform .12s, filter .12s;
     }
     button:hover { transform: translateY(-1px); filter: brightness(1.06); }
     .green { background: #22c55e; color: #052e16; }
@@ -105,31 +74,12 @@
     .red { background: #ef4444; color: white; }
     .purple { background: #a78bfa; color: #2e1065; }
     .ghost { background: rgba(255,255,255,.12); color: white; border: 1px solid rgba(255,255,255,.16); }
-    .shop-title {
-      margin: 17px 0 7px;
-      color: #dbeafe;
-      font-size: 13px;
-      font-weight: 900;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    .mobile-controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
+    .shop-title { margin: 17px 0 7px; color: #dbeafe; font-size: 13px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .mobile-controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .content { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
     footer { text-align: center; color: #94a3b8; padding: 24px; }
     footer a { color: #93c5fd; }
-    @media (max-width: 900px) {
-      .hero, .game-layout, .content { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .hero, .game-layout, .content { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -143,17 +93,18 @@
 <div class="wrap">
   <section class="hero">
     <div class="card">
-      <h1>Platformer cổ điển</h1>
-      <p>Chạy, nhảy, ăn xu, mở khóa skin và chạm cờ để thắng màn. Game dùng nhân vật plumber tự vẽ bằng canvas, không cần ảnh ngoài.</p>
+      <h1>Platformer Level 0–20</h1>
+      <p>Chạy, nhảy, đập block ?, ăn nấm để lớn lên, né spike, bật spring, đi moving platform và chạm cờ để sang level tiếp theo.</p>
       <p><b>Điều khiển:</b> A/D hoặc ←/→ để đi, Space/W/↑ để nhảy.</p>
     </div>
     <div class="card">
-      <h2>🎯 Mục tiêu</h2>
+      <h2>🎯 Entity mới</h2>
       <ul>
-        <li>Ăn coin để mua skin.</li>
-        <li>Đạp lên quái để diệt.</li>
-        <li>Đập block ? để lấy thưởng.</li>
-        <li>Đi tới lá cờ để thắng màn.</li>
+        <li>🍄 Nấm: ăn để lớn lên và chịu thêm 1 hit.</li>
+        <li>⚠️ Spike: chạm vào sẽ mất nấm hoặc thua.</li>
+        <li>🌀 Spring: bật nhảy cao.</li>
+        <li>↔ Moving platform: platform di chuyển.</li>
+        <li>👾 Nhiều quái hơn theo level.</li>
       </ul>
     </div>
   </section>
@@ -184,7 +135,7 @@
       <div class="stats">
         <div class="stat"><span>Điểm</span><strong id="score">0</strong></div>
         <div class="stat"><span>Xu</span><strong id="coins">0</strong></div>
-        <div class="stat"><span>Màn</span><strong id="level">1</strong></div>
+        <div class="stat"><span>Level</span><strong id="level">0</strong></div>
         <div class="stat"><span>Skin</span><strong id="skin">Classic</strong></div>
       </div>
 
@@ -197,13 +148,13 @@
       <button class="purple" id="nightBtn">Night Plumber - 150 xu</button>
       <button class="green" id="frogBtn">Frog Suit - 220 xu</button>
 
-      <p>Skin đã mua sẽ lưu lại bằng localStorage trên trình duyệt.</p>
+      <p>Qua cờ sẽ tự sang level tiếp theo. Hoàn thành level 20 là phá đảo.</p>
     </aside>
   </section>
 
   <section class="content">
-    <div class="card"><h2>Game có gì?</h2><p>Plumber World là game platformer nhẹ, chạy trực tiếp trong HTML Canvas. Không cần tải app và chơi được trên máy tính lẫn điện thoại.</p></div>
-    <div class="card"><h2>Mẹo chơi</h2><p>Canh nhảy lên đầu quái để diệt. Block dấu hỏi có thể cho xu. Đừng rơi xuống vực và đừng chạm ngang vào quái.</p></div>
+    <div class="card"><h2>Game có gì?</h2><p>Game HTML5 Canvas full platformer với level tăng dần, block ?, nấm, quái, spike, spring và moving platform.</p></div>
+    <div class="card"><h2>Mẹo chơi</h2><p>Ăn nấm trước khi qua khu có spike. Đạp đầu quái để diệt. Spring giúp vượt hố rộng và lên platform cao.</p></div>
   </section>
 </div>
 
@@ -219,81 +170,89 @@ const skinEl = document.getElementById('skin');
 
 const GRAVITY = 0.60;
 const TILE = 48;
+const MAX_LEVEL = 20;
 let keys = {};
 let cameraX = 0;
 let score = 0;
-let level = 1;
+let level = 0;
 let coins = Number(localStorage.getItem('plumberCoins') || 0);
 let skin = localStorage.getItem('plumberSkin') || 'Classic';
 let owned = JSON.parse(localStorage.getItem('plumberOwned') || '["Classic"]');
 let state = 'menu';
 
 let player, solids, questionBlocks, coinItems, enemies, platforms, flag, worldWidth;
+let mushrooms, spikes, springs, movingPlatforms;
 
 function save(){
   localStorage.setItem('plumberCoins', coins);
   localStorage.setItem('plumberSkin', skin);
   localStorage.setItem('plumberOwned', JSON.stringify(owned));
 }
-function updateUI(){
-  scoreEl.textContent = score;
-  coinsEl.textContent = coins;
-  levelEl.textContent = level;
-  skinEl.textContent = skin;
-}
+function updateUI(){ scoreEl.textContent = score; coinsEl.textContent = coins; levelEl.textContent = level; skinEl.textContent = skin; }
+function rand(a,b){return Math.random()*(b-a)+a;}
 function rects(a,b){ return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y; }
 
 function makeLevel(){
-  worldWidth = 3600;
-  player = {x:90,y:260,w:34,h:46,vx:0,vy:0,onGround:false,face:1,inv:0};
-  solids = [];
-  questionBlocks = [];
-  coinItems = [];
-  enemies = [];
-  platforms = [];
-  flag = {x:3400,y:170,w:26,h:250};
+  const L = Math.max(0, Math.min(MAX_LEVEL, level));
+  worldWidth = 2600 + L * 120;
+  player = {x:90,y:260,w:34,h:46,vx:0,vy:0,onGround:false,face:1,inv:0,big:false};
+  solids=[]; questionBlocks=[]; coinItems=[]; enemies=[]; platforms=[]; mushrooms=[]; spikes=[]; springs=[]; movingPlatforms=[];
+  flag = {x:worldWidth-210,y:170,w:26,h:250};
+
+  const gap1Start = 980 + L * 10;
+  const gap1End = gap1Start + Math.max(72, 130 - L * 2);
+  const gap2Start = 1820 + L * 15;
+  const gap2End = gap2Start + Math.max(78, 140 - L * 2);
 
   for(let x=0;x<worldWidth;x+=TILE){
-    if(!(x>1180 && x<1280) && !(x>2440 && x<2540)) solids.push({x,y:430,w:TILE,h:110,type:'ground'});
+    if(!(x>gap1Start && x<gap1End) && !(x>gap2Start && x<gap2End)) solids.push({x,y:430,w:TILE,h:110,type:'ground'});
   }
 
-  // pipes / blocks
-  solids.push({x:520,y:350,w:80,h:80,type:'pipe'});
-  solids.push({x:1620,y:350,w:100,h:80,type:'pipe'});
-  solids.push({x:2850,y:350,w:90,h:80,type:'pipe'});
+  solids.push({x:500,y:350,w:80,h:80,type:'pipe'});
+  solids.push({x:1380+L*12,y:350,w:96,h:80,type:'pipe'});
+  solids.push({x:worldWidth-760,y:350,w:90,h:80,type:'pipe'});
 
-  // floating platforms
-  platforms.push({x:720,y:310,w:220,h:26,type:'brick'});
-  platforms.push({x:1060,y:250,w:260,h:26,type:'brick'});
-  platforms.push({x:1880,y:300,w:260,h:26,type:'brick'});
-  platforms.push({x:2260,y:250,w:280,h:26,type:'brick'});
+  platforms.push({x:640,y:300,w:260,h:26,type:'brick'});
+  platforms.push({x:980,y:238,w:300,h:26,type:'brick'});
+  platforms.push({x:1500+L*8,y:288,w:270,h:26,type:'brick'});
+  platforms.push({x:1960+L*10,y:236,w:300,h:26,type:'brick'});
+  platforms.push({x:worldWidth-980,y:286,w:260,h:26,type:'brick'});
 
-  // question blocks
-  questionBlocks.push({x:780,y:230,w:44,h:44,used:false});
-  questionBlocks.push({x:1220,y:170,w:44,h:44,used:false});
-  questionBlocks.push({x:1960,y:220,w:44,h:44,used:false});
-  questionBlocks.push({x:2380,y:170,w:44,h:44,used:false});
+  movingPlatforms.push({x:1250+L*8,y:330,w:150,h:22,type:'move',baseX:1250+L*8,range:150+L*4,vx:1.2});
+  if(L>=6) movingPlatforms.push({x:2300+L*12,y:300,w:140,h:22,type:'move',baseX:2300+L*12,range:180,vx:1.4});
 
-  enemies.push({x:680,y:394,w:34,h:36,vx:-1.1,alive:true});
-  enemies.push({x:1480,y:394,w:34,h:36,vx:-1.2,alive:true});
-  enemies.push({x:2050,y:394,w:34,h:36,vx:-1.4,alive:true});
-  enemies.push({x:3000,y:394,w:34,h:36,vx:-1.4,alive:true});
+  questionBlocks.push({x:720,y:218,w:44,h:44,used:false,reward:'mushroom'});
+  questionBlocks.push({x:1060,y:156,w:44,h:44,used:false,reward:'coin'});
+  questionBlocks.push({x:1120,y:156,w:44,h:44,used:false,reward:'mushroom'});
+  questionBlocks.push({x:1600+L*8,y:208,w:44,h:44,used:false,reward:'coin'});
+  questionBlocks.push({x:2060+L*10,y:154,w:44,h:44,used:false,reward:'mushroom'});
+  questionBlocks.push({x:worldWidth-890,y:206,w:44,h:44,used:false,reward:'coin'});
 
-  // loose coins
-  for(let i=0;i<18;i++) coinItems.push({x:360+i*150,y:270-rand(0,90),w:24,h:24,vy:0,active:true});
+  const enemyCount = Math.min(12, 4 + Math.floor(L/2));
+  for(let i=0;i<enemyCount;i++) enemies.push({x:620+i*260,y:394,w:34,h:36,vx:-(1.0+L*0.035+(i%3)*0.12),alive:true,type:i%4===0?'shell':'goomba'});
+
+  const coinCount = 18 + L;
+  for(let i=0;i<coinCount;i++) coinItems.push({x:330+i*135,y:245-rand(0,105),w:24,h:24,vy:0,active:true});
+
+  if(L>=2) spikes.push({x:gap1Start-90,y:404,w:42,h:26});
+  if(L>=4) spikes.push({x:gap2Start-110,y:404,w:42,h:26});
+  springs.push({x:900,y:400,w:34,h:30});
+  if(L>=8) springs.push({x:worldWidth-1120,y:400,w:34,h:30});
 }
-function rand(a,b){return Math.random()*(b-a)+a;}
 
-function startGame(){ state='playing'; score=0; cameraX=0; makeLevel(); updateUI(); }
-function winGame(){ state='win'; score += 500; level++; updateUI(); }
+function startGame(){ level=0; state='playing'; score=0; cameraX=0; makeLevel(); updateUI(); }
+function nextLevel(){
+  score += 500 + level * 25;
+  if(level < MAX_LEVEL){ level++; cameraX=0; makeLevel(); state='playing'; }
+  else state='win';
+  updateUI();
+}
 function loseGame(){ state='dead'; updateUI(); }
-
 function buySkin(name, price){
   if(owned.includes(name)){ skin=name; save(); updateUI(); return alert('Đang dùng '+name); }
   if(coins < price) return alert('Không đủ xu. Hãy ăn thêm coin trong game.');
   coins -= price; owned.push(name); skin=name; save(); updateUI(); alert('Đã mua '+name+'!');
 }
-
 function skinPalette(){
   if(skin==='Gold') return {hat:'#facc15',shirt:'#eab308',pants:'#92400e',skin:'#fed7aa'};
   if(skin==='Night') return {hat:'#7c3aed',shirt:'#312e81',pants:'#111827',skin:'#e9d5ff'};
@@ -302,138 +261,100 @@ function skinPalette(){
 }
 
 function drawPlumber(p){
-  const pal = skinPalette();
-  const x = Math.floor(p.x-cameraX), y = Math.floor(p.y);
+  const pal=skinPalette(), x=Math.floor(p.x-cameraX), y=Math.floor(p.y);
   ctx.save();
-  if(p.face < 0){ ctx.translate(x+p.w/2,y); ctx.scale(-1,1); ctx.translate(-(x+p.w/2),-y); }
-  // legs
-  ctx.fillStyle = pal.pants; ctx.fillRect(x+7,y+32,8,16); ctx.fillRect(x+21,y+32,8,16);
-  // body
-  ctx.fillStyle = pal.shirt; ctx.fillRect(x+5,y+18,25,19);
-  // head
-  ctx.fillStyle = pal.skin; ctx.fillRect(x+7,y+6,23,17);
-  // hat
-  ctx.fillStyle = pal.hat; ctx.fillRect(x+4,y+1,27,8); ctx.fillRect(x+18,y+8,17,5);
-  // eye / moustache
-  ctx.fillStyle = '#020617'; ctx.fillRect(x+23,y+11,4,4); ctx.fillRect(x+20,y+18,12,4);
-  // arm
-  ctx.fillStyle = pal.skin; ctx.fillRect(x+29,y+22,8,10);
+  if(p.inv>0 && Math.floor(p.inv/5)%2===0) ctx.globalAlpha=.45;
+  if(p.face<0){ ctx.translate(x+p.w/2,y); ctx.scale(-1,1); ctx.translate(-(x+p.w/2),-y); }
+  ctx.fillStyle=pal.pants; ctx.fillRect(x+7,y+p.h-14,8,16); ctx.fillRect(x+21,y+p.h-14,8,16);
+  ctx.fillStyle=pal.shirt; ctx.fillRect(x+5,y+p.h-30,25,20);
+  ctx.fillStyle=pal.skin; ctx.fillRect(x+7,y+6,23,17);
+  ctx.fillStyle=pal.hat; ctx.fillRect(x+4,y+1,27,8); ctx.fillRect(x+18,y+8,17,5);
+  ctx.fillStyle='#020617'; ctx.fillRect(x+23,y+11,4,4); ctx.fillRect(x+20,y+18,12,4);
+  ctx.fillStyle=pal.skin; ctx.fillRect(x+29,y+p.h-26,8,10);
+  if(p.big){ ctx.fillStyle='white'; ctx.font='900 14px Arial'; ctx.fillText('BIG',x-2,y-6); }
   ctx.restore();
 }
-
-function drawEnemy(e){
-  if(!e.alive) return;
-  const x=e.x-cameraX,y=e.y;
-  ctx.fillStyle='#7c2d12'; ctx.fillRect(x,y+8,e.w,e.h-8);
-  ctx.fillStyle='#a16207'; ctx.fillRect(x+3,y,e.w-6,14);
-  ctx.fillStyle='white'; ctx.fillRect(x+7,y+12,6,6); ctx.fillRect(x+21,y+12,6,6);
-  ctx.fillStyle='black'; ctx.fillRect(x+9,y+14,3,3); ctx.fillRect(x+23,y+14,3,3);
-}
-function drawCoin(c){
-  if(!c.active) return;
-  ctx.beginPath(); ctx.arc(c.x-cameraX+c.w/2,c.y+c.h/2,12,0,Math.PI*2);
-  ctx.fillStyle='#facc15'; ctx.fill(); ctx.strokeStyle='#92400e'; ctx.lineWidth=2; ctx.stroke();
-}
-
-function drawWorld(){
-  // sky
-  const g=ctx.createLinearGradient(0,0,0,540); g.addColorStop(0,'#38bdf8'); g.addColorStop(.75,'#60a5fa'); g.addColorStop(1,'#166534'); ctx.fillStyle=g; ctx.fillRect(0,0,960,540);
-  // clouds
-  for(let i=0;i<8;i++){ let x=(i*440 - cameraX*0.25)%1200; if(x< -100)x+=1200; drawCloud(x,70+(i%3)*35); }
-  // hills
-  ctx.fillStyle='rgba(22,101,52,.45)';
-  for(let i=0;i<6;i++){ let x=i*650-cameraX*.4; ctx.beginPath(); ctx.arc(x+180,430,170,Math.PI,0); ctx.fill(); }
-  // solids
-  solids.forEach(s=>drawSolid(s)); platforms.forEach(s=>drawSolid(s)); questionBlocks.forEach(drawQuestion);
-  coinItems.forEach(drawCoin); enemies.forEach(drawEnemy);
-  // flag
-  ctx.fillStyle='#713f12'; ctx.fillRect(flag.x-cameraX,flag.y,8,flag.h);
-  ctx.fillStyle='#22c55e'; ctx.fillRect(flag.x-cameraX+8,flag.y+10,70,42);
-  ctx.fillStyle='white'; ctx.font='900 20px Arial'; ctx.fillText('GO!',flag.x-cameraX+20,flag.y+38);
-  drawPlumber(player);
-  // HUD
-  ctx.fillStyle='rgba(2,6,23,.55)'; ctx.fillRect(16,14,250,48);
-  ctx.fillStyle='white'; ctx.font='900 22px Arial'; ctx.fillText('Score '+score+'   Coins '+coins,30,45);
-  if(state==='menu') centerText('Plumber World','Bấm Bắt đầu để chơi');
-  if(state==='dead') centerText('Game Over','Bấm Chơi lại để thử tiếp');
-  if(state==='win') centerText('Bạn đã thắng!','Bấm Chơi lại để chơi màn mới');
-}
+function drawEnemy(e){ if(!e.alive)return; const x=e.x-cameraX,y=e.y; ctx.fillStyle=e.type==='shell'?'#14532d':'#7c2d12'; ctx.fillRect(x,y+8,e.w,e.h-8); ctx.fillStyle=e.type==='shell'?'#22c55e':'#a16207'; ctx.fillRect(x+3,y,e.w-6,14); ctx.fillStyle='white'; ctx.fillRect(x+7,y+12,6,6); ctx.fillRect(x+21,y+12,6,6); ctx.fillStyle='black'; ctx.fillRect(x+9,y+14,3,3); ctx.fillRect(x+23,y+14,3,3); }
+function drawCoin(c){ if(!c.active)return; ctx.beginPath(); ctx.arc(c.x-cameraX+c.w/2,c.y+c.h/2,12,0,Math.PI*2); ctx.fillStyle='#facc15'; ctx.fill(); ctx.strokeStyle='#92400e'; ctx.lineWidth=2; ctx.stroke(); }
+function drawMushroom(m){ if(!m.active)return; const x=m.x-cameraX,y=m.y; ctx.fillStyle='#ef4444'; ctx.fillRect(x,y+4,m.w,m.h/2); ctx.fillStyle='#fff'; ctx.fillRect(x+5,y+7,7,7); ctx.fillRect(x+18,y+7,7,7); ctx.fillStyle='#fed7aa'; ctx.fillRect(x+7,y+18,16,12); ctx.fillStyle='#020617'; ctx.fillRect(x+11,y+22,3,3); ctx.fillRect(x+19,y+22,3,3); }
+function drawSpike(s){ const x=s.x-cameraX,y=s.y; ctx.fillStyle='#e5e7eb'; ctx.beginPath(); ctx.moveTo(x,y+s.h); ctx.lineTo(x+s.w/2,y); ctx.lineTo(x+s.w,y+s.h); ctx.closePath(); ctx.fill(); ctx.strokeStyle='#64748b'; ctx.stroke(); }
+function drawSpring(s){ const x=s.x-cameraX,y=s.y; ctx.fillStyle='#38bdf8'; ctx.fillRect(x,y+18,s.w,12); ctx.strokeStyle='white'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(x+4,y+18); ctx.lineTo(x+10,y+6); ctx.lineTo(x+18,y+18); ctx.lineTo(x+26,y+6); ctx.lineTo(x+32,y+18); ctx.stroke(); }
 function drawCloud(x,y){ctx.fillStyle='rgba(255,255,255,.85)';ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.arc(x+26,y-12,28,0,Math.PI*2);ctx.arc(x+58,y,22,0,Math.PI*2);ctx.fill();}
-function drawSolid(s){
-  const x=s.x-cameraX; if(x<-80||x>1040)return;
-  if(s.type==='pipe'){ctx.fillStyle='#15803d';ctx.fillRect(x,s.y,s.w,s.h);ctx.fillStyle='#22c55e';ctx.fillRect(x-8,s.y,s.w+16,20);return;}
-  ctx.fillStyle=s.type==='brick'?'#b45309':'#166534'; ctx.fillRect(x,s.y,s.w,s.h);
-  ctx.strokeStyle='rgba(0,0,0,.18)'; ctx.strokeRect(x,s.y,s.w,s.h);
-}
-function drawQuestion(b){
-  const x=b.x-cameraX; ctx.fillStyle=b.used?'#78716c':'#facc15'; ctx.fillRect(x,b.y,b.w,b.h); ctx.strokeStyle='#92400e'; ctx.strokeRect(x,b.y,b.w,b.h); ctx.fillStyle='#422006'; ctx.font='900 28px Arial'; ctx.fillText(b.used?'': '?',x+13,b.y+32);
-}
+function drawSolid(s){ const x=s.x-cameraX; if(x<-120||x>1080)return; if(s.type==='pipe'){ctx.fillStyle='#15803d';ctx.fillRect(x,s.y,s.w,s.h);ctx.fillStyle='#22c55e';ctx.fillRect(x-8,s.y,s.w+16,20);return;} ctx.fillStyle=s.type==='move'?'#6366f1':s.type==='brick'?'#b45309':'#166534'; ctx.fillRect(x,s.y,s.w,s.h); ctx.strokeStyle='rgba(0,0,0,.18)'; ctx.strokeRect(x,s.y,s.w,s.h); }
+function drawQuestion(b){ const x=b.x-cameraX; ctx.fillStyle=b.used?'#78716c':'#facc15'; ctx.fillRect(x,b.y,b.w,b.h); ctx.strokeStyle='#92400e'; ctx.strokeRect(x,b.y,b.w,b.h); ctx.fillStyle='#422006'; ctx.font='900 28px Arial'; ctx.fillText(b.used?'':'?',x+13,b.y+32); }
 function centerText(a,b){ctx.fillStyle='rgba(2,6,23,.72)';ctx.fillRect(250,170,460,160);ctx.fillStyle='white';ctx.font='900 42px Arial';ctx.textAlign='center';ctx.fillText(a,480,230);ctx.font='21px Arial';ctx.fillText(b,480,275);ctx.textAlign='left';}
 
-function moveAndCollide(){
-  // input
-  const left=keys.ArrowLeft||keys.KeyA, right=keys.ArrowRight||keys.KeyD, jump=keys.Space||keys.KeyW||keys.ArrowUp;
-  player.vx = 0;
-  if(left){player.vx=-4.2;player.face=-1;} if(right){player.vx=4.2;player.face=1;}
-  if(jump && player.onGround){player.vy=-17;player.onGround=false;}
-  player.vy += GRAVITY; if(player.vy>16)player.vy=16;
-
-  player.x += player.vx; collideAxis('x');
-  player.y += player.vy; player.onGround=false; collideAxis('y');
-
-  if(player.y>620) loseGame();
-  cameraX = Math.max(0, Math.min(worldWidth-960, player.x-360));
+function drawWorld(){
+  const g=ctx.createLinearGradient(0,0,0,540); g.addColorStop(0,'#38bdf8'); g.addColorStop(.75,'#60a5fa'); g.addColorStop(1,'#166534'); ctx.fillStyle=g; ctx.fillRect(0,0,960,540);
+  for(let i=0;i<8;i++){ let x=(i*440-cameraX*.25)%1200; if(x<-100)x+=1200; drawCloud(x,70+(i%3)*35); }
+  ctx.fillStyle='rgba(22,101,52,.45)'; for(let i=0;i<6;i++){ let x=i*650-cameraX*.4; ctx.beginPath(); ctx.arc(x+180,430,170,Math.PI,0); ctx.fill(); }
+  solids.forEach(drawSolid); platforms.forEach(drawSolid); movingPlatforms.forEach(drawSolid); questionBlocks.forEach(drawQuestion);
+  spikes.forEach(drawSpike); springs.forEach(drawSpring); coinItems.forEach(drawCoin); mushrooms.forEach(drawMushroom); enemies.forEach(drawEnemy);
+  ctx.fillStyle='#713f12'; ctx.fillRect(flag.x-cameraX,flag.y,8,flag.h); ctx.fillStyle='#22c55e'; ctx.fillRect(flag.x-cameraX+8,flag.y+10,70,42); ctx.fillStyle='white'; ctx.font='900 20px Arial'; ctx.fillText('NEXT',flag.x-cameraX+15,flag.y+38);
+  drawPlumber(player);
+  ctx.fillStyle='rgba(2,6,23,.55)'; ctx.fillRect(16,14,330,48); ctx.fillStyle='white'; ctx.font='900 22px Arial'; ctx.fillText('Level '+level+'   Score '+score+'   Coins '+coins,30,45);
+  if(state==='menu') centerText('Plumber World','Level 0-20: bấm Bắt đầu để chơi');
+  if(state==='dead') centerText('Game Over','Bấm Chơi lại để thử tiếp');
+  if(state==='win') centerText('Hoàn thành Level 20!','Bạn đã phá đảo game');
 }
-function allBlocks(){ return solids.concat(platforms).concat(questionBlocks); }
+
+function allBlocks(){ return solids.concat(platforms).concat(movingPlatforms).concat(questionBlocks); }
+function moveAndCollide(){
+  const left=keys.ArrowLeft||keys.KeyA, right=keys.ArrowRight||keys.KeyD, jump=keys.Space||keys.KeyW||keys.ArrowUp;
+  player.vx=0; if(left){player.vx=-4.6;player.face=-1;} if(right){player.vx=4.6;player.face=1;}
+  if(jump && player.onGround){player.vy=-17;player.onGround=false;}
+  player.vy+=GRAVITY; if(player.vy>16)player.vy=16; if(player.inv>0)player.inv--;
+  player.x+=player.vx; collideAxis('x'); player.y+=player.vy; player.onGround=false; collideAxis('y');
+  if(player.y>620) loseGame(); cameraX=Math.max(0,Math.min(worldWidth-960,player.x-360));
+}
 function collideAxis(axis){
   for(const b of allBlocks()){
     if(!rects(player,b)) continue;
-    if(axis==='x'){
-      if(player.vx>0) player.x=b.x-player.w;
-      if(player.vx<0) player.x=b.x+b.w;
-    } else {
+    if(axis==='x'){ if(player.vx>0) player.x=b.x-player.w; if(player.vx<0) player.x=b.x+b.w; }
+    else {
       if(player.vy>0){ player.y=b.y-player.h; player.vy=0; player.onGround=true; }
-      if(player.vy<0){
-        player.y=b.y+b.h; player.vy=0;
-        if(questionBlocks.includes(b) && !b.used){ b.used=true; spawnBlockReward(b); }
-      }
+      if(player.vy<0){ player.y=b.y+b.h; player.vy=0; if(questionBlocks.includes(b)&&!b.used){ b.used=true; spawnBlockReward(b); } }
     }
   }
 }
-function spawnBlockReward(b){ coinItems.push({x:b.x+10,y:b.y-32,w:24,h:24,vy:-2,active:true}); score += 50; }
+function spawnBlockReward(b){
+  if(b.reward==='mushroom'){ mushrooms.push({x:b.x+8,y:b.y-32,w:30,h:30,vx:1.4,vy:-2,active:true}); score+=100; }
+  else { coinItems.push({x:b.x+10,y:b.y-34,w:24,h:24,vy:-2,active:true}); coins+=3; score+=75; save(); }
+  updateUI();
+}
+function updateMovingPlatforms(){ movingPlatforms.forEach(p=>{ p.x+=p.vx; if(p.x>p.baseX+p.range||p.x<p.baseX-p.range)p.vx*=-1; const stand=player.y+player.h<=p.y+12&&player.y+player.h>=p.y-8&&player.x+player.w>p.x&&player.x<p.x+p.w&&player.vy>=0; if(stand)player.x+=p.vx; }); }
 function updateEnemies(){
   enemies.forEach(e=>{
-    if(!e.alive) return;
-    e.x += e.vx;
-    let front = {x:e.vx<0?e.x-2:e.x+e.w+2,y:e.y+e.h+4,w:4,h:4};
-    let hasGround = solids.concat(platforms).some(s=>rects(front,s));
-    if(!hasGround) e.vx *= -1;
-    for(const s of solids.concat(platforms)){ if(rects(e,s)){ e.vx*=-1; e.x+=e.vx*4; } }
+    if(!e.alive)return; e.x+=e.vx;
+    let front={x:e.vx<0?e.x-2:e.x+e.w+2,y:e.y+e.h+4,w:4,h:4}; let hasGround=solids.concat(platforms,movingPlatforms).some(s=>rects(front,s)); if(!hasGround)e.vx*=-1;
+    for(const s of solids.concat(platforms,movingPlatforms)){ if(rects(e,s)){ e.vx*=-1; e.x+=e.vx*4; } }
     if(rects(player,e)){
-      if(player.vy>0 && player.y+player.h-e.y<18){ e.alive=false; player.vy=-9; score+=100; }
-      else if(player.inv<=0){ loseGame(); }
+      if(player.vy>0 && player.y+player.h-e.y<18){ e.alive=false; player.vy=-10; score+=e.type==='shell'?150:100; }
+      else if(player.inv<=0){ if(player.big){ player.big=false; player.h=46; player.y+=14; player.inv=80; } else loseGame(); }
     }
   });
 }
-function updateCoins(){
-  coinItems.forEach(c=>{ if(!c.active)return; if(rects(player,c)){c.active=false; coins++; score+=25; save(); updateUI();} });
-  coinItems=coinItems.filter(c=>c.active);
+function updateMushrooms(){
+  mushrooms.forEach(m=>{
+    if(!m.active)return; m.vy+=GRAVITY; m.x+=m.vx; m.y+=m.vy;
+    for(const s of solids.concat(platforms,movingPlatforms)){ if(rects(m,s)){ if(m.vy>0){m.y=s.y-m.h;m.vy=0;} else m.vx*=-1; } }
+    if(rects(player,m)){ m.active=false; if(!player.big){player.big=true;player.h=60;player.y-=14;} coins+=5; score+=250; save(); updateUI(); }
+  });
+  mushrooms=mushrooms.filter(m=>m.active&&m.y<620);
 }
-function updateGame(){
-  if(state==='playing'){
-    moveAndCollide(); updateEnemies(); updateCoins();
-    if(rects(player,flag)) winGame();
-  }
-  drawWorld();
-  requestAnimationFrame(updateGame);
+function updateHazards(){
+  spikes.forEach(s=>{ if(rects(player,s)){ if(player.big){player.big=false;player.h=46;player.y+=14;player.inv=80;} else loseGame(); } });
+  springs.forEach(s=>{ if(rects(player,s)&&player.vy>0){player.y=s.y-player.h;player.vy=-19;player.onGround=false;score+=10;} });
 }
+function updateCoins(){ coinItems.forEach(c=>{ if(!c.active)return; if(rects(player,c)){c.active=false;coins++;score+=25;save();updateUI();} }); coinItems=coinItems.filter(c=>c.active); }
+function updateGame(){ if(state==='playing'){ updateMovingPlatforms(); moveAndCollide(); updateEnemies(); updateMushrooms(); updateHazards(); updateCoins(); if(rects(player,flag)) nextLevel(); } drawWorld(); requestAnimationFrame(updateGame); }
 
 window.addEventListener('keydown',e=>{keys[e.code]=true;if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();});
 window.addEventListener('keyup',e=>keys[e.code]=false);
 function hold(btn,code){btn.addEventListener('pointerdown',()=>keys[code]=true);btn.addEventListener('pointerup',()=>keys[code]=false);btn.addEventListener('pointerleave',()=>keys[code]=false);}
 hold(document.getElementById('leftBtn'),'ArrowLeft'); hold(document.getElementById('rightBtn'),'ArrowRight'); hold(document.getElementById('jumpBtn'),'Space');
 document.getElementById('startBtn').onclick=startGame;
-document.getElementById('helpBtn').onclick=()=>alert('Đi trái/phải bằng A/D hoặc mũi tên. Nhảy bằng Space/W/↑. Đập block ? từ dưới, ăn coin, đạp đầu quái và tới cờ để thắng.');
+document.getElementById('helpBtn').onclick=()=>alert('Đi trái/phải bằng A/D hoặc mũi tên. Nhảy bằng Space/W/↑. Đập block ? từ dưới để lấy coin hoặc nấm. Ăn nấm để lớn lên. Né spike, dùng spring, đứng trên moving platform và tới cờ để sang level.');
 document.getElementById('classicBtn').onclick=()=>buySkin('Classic',0);
 document.getElementById('goldBtn').onclick=()=>buySkin('Gold',80);
 document.getElementById('nightBtn').onclick=()=>buySkin('Night',150);
