@@ -1,143 +1,178 @@
-<!doctype html>
+chèn nhạc cho tui trongn đoạn code này : <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Plumber Quest PRO HD - Yah Games</title>
-<meta name="description" content="Game platformer hiện đại miễn phí. Chạy nhảy, ăn xu, vượt màn, đăng nhập online, leaderboard và skin cực đẹp.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plumber Quest - Yah Games</title>
+  <meta name="description" content="Plumber Quest là game platformer HTML5 miễn phí: chạy, nhảy, ăn xu, ăn nấm, vượt 5 map khác nhau và mở khóa skin.">
 
-<link rel="stylesheet" href="style.css">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706" crossorigin="anonymous"></script>
 
-<!-- Adsense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706" crossorigin="anonymous"></script>
-
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top,#1d4ed8,#020617 70%);color:white;min-height:100vh}
+    header{background:rgba(2,6,23,.92);border-bottom:1px solid rgba(255,255,255,.12);position:sticky;top:0;z-index:5;backdrop-filter:blur(10px)}
+    .nav{width:min(1180px,100%);margin:auto;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .logo{font-size:26px;font-weight:900}.nav a{color:#93c5fd;text-decoration:none;font-weight:800;margin-left:12px}
+    .wrap{width:min(1180px,100%);margin:auto;padding:14px}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-bottom:14px}
+    .card{background:rgba(15,23,42,.92);border:1px solid rgba(255,255,255,.13);border-radius:24px;padding:16px;margin-bottom:14px;box-shadow:0 22px 60px rgba(0,0,0,.35)}
+    h1{margin:0 0 8px;font-size:clamp(34px,5vw,56px)}p,li{color:#cbd5e1;line-height:1.5}.ad-card{min-height:100px;text-align:center;overflow:hidden}.ad-label{font-size:12px;color:#94a3b8;margin-bottom:6px}
+    .game-layout{display:grid;grid-template-columns:1fr 330px;gap:14px;align-items:start}
+    canvas{width:100%;aspect-ratio:16/9;display:block;border-radius:22px;border:2px solid rgba(255,255,255,.15);background:#38bdf8;image-rendering:pixelated}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px}.stat span{display:block;color:#94a3b8;font-size:12px;margin-bottom:5px}.stat strong{font-size:22px}
+    button{width:100%;border:0;border-radius:15px;padding:13px 14px;margin-top:9px;cursor:pointer;font-weight:900;font-size:15px;transition:.12s}button:hover{filter:brightness(1.07);transform:translateY(-1px)}
+    .green{background:#22c55e;color:#052e16}.blue{background:#38bdf8;color:#082f49}.yellow{background:#facc15;color:#422006}.red{background:#ef4444;color:white}.purple{background:#a78bfa;color:#2e1065}.ghost{background:rgba(255,255,255,.12);color:white;border:1px solid rgba(255,255,255,.16)}
+    .shop-title{margin:17px 0 7px;color:#dbeafe;font-size:13px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.mobile-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+    footer{text-align:center;color:#94a3b8;padding:24px}footer a{color:#93c5fd}@media(max-width:900px){.hero,.game-layout{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
+<header><div class="nav"><div class="logo">🍄 Plumber Quest</div><nav><a href="/about.html">About</a><a href="/privacy.html">Privacy</a></nav></div></header>
 
-<header class="topbar">
-  <div class="logo">🍄 Plumber Quest PRO HD</div>
+<div class="wrap">
+  <section class="hero">
+    <div class="card"><h1>Bản platformer xịn</h1><p>Chạy, nhảy, ăn xu, ăn nấm, đập block, né spike, đạp quái và qua 5 map khác nhau. Bản này có camera scroll, nhân vật pixel, background, UI rõ ràng và gameplay mượt hơn.</p><p><b>Điều khiển:</b> A/D hoặc ←/→ để đi, Space/W/↑ để nhảy.</p></div>
+    <div class="card"><h2>5 map riêng</h2><ul><li>Level 0: Đồng cỏ tutorial.</li><li>Level 1: Thành phố ống nước.</li><li>Level 2: Hang đá nhiều platform.</li><li>Level 3: Núi lửa có lava/spike.</li><li>Level 4: Lâu đài cuối có moving platform.</li></ul></div>
+  </section>
 
-  <nav>
-    <a href="about.html">About</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="https://paypal.me/HAThi247/1" target="_blank">Ủng hộ ❤️</a>
-  </nav>
-</header>
+  <section class="card ad-card"><div class="ad-label">Quảng cáo</div><!-- ta --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1057751843910706" data-ad-slot="6646434479" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></section>
 
-<section class="hero">
-  <div class="hero-left">
-    <h1>Mario-like hiện đại cực đẹp</h1>
-    <p>Chạy, nhảy, ăn xu, mở skin, vượt 5 thế giới và leo top leaderboard online.</p>
-  </div>
+  <section class="game-layout">
+    <main class="card"><canvas id="game" width="960" height="540"></canvas><div class="mobile-controls"><button class="ghost" id="leftBtn">⬅ Trái</button><button class="blue" id="jumpBtn">⬆ Nhảy</button><button class="ghost" id="rightBtn">➡ Phải</button></div></main>
+    <aside class="card">
+      <div class="stats"><div class="stat"><span>Điểm</span><strong id="score">0</strong></div><div class="stat"><span>Xu</span><strong id="coins">0</strong></div><div class="stat"><span>Level</span><strong id="level">0</strong></div><div class="stat"><span>Skin</span><strong id="skin">Classic</strong></div></div>
+      <button class="green" id="startBtn">▶ Bắt đầu / Chơi lại</button><button class="blue" id="helpBtn">❔ Cách chơi</button>
+      <div class="shop-title">Shop skin</div><button class="red" id="classicBtn">Classic - Miễn phí</button><button class="yellow" id="goldBtn">Gold Plumber - 80 xu</button><button class="purple" id="nightBtn">Night Plumber - 150 xu</button><button class="green" id="frogBtn">Frog Suit - 220 xu</button>
+      <p>Ăn nấm để lớn lên và chịu thêm 1 hit. Qua cờ sẽ tự sang map tiếp theo.</p>
+    </aside>
+  </section>
+</div>
+<footer>© 2026 Yah Games · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a></footer>
 
-  <div class="hero-right">
-    <div class="card auth-box">
-      <h3>Tài khoản</h3>
+<script>
+const canvas=document.getElementById('game');
+const ctx=canvas.getContext('2d');
+const scoreEl=document.getElementById('score'),coinsEl=document.getElementById('coins'),levelEl=document.getElementById('level'),skinEl=document.getElementById('skin');
+const W=960,H=540,GRAVITY=.58,MAX_LEVEL=4;
+let keys={},state='menu',level=0,score=0,cameraX=0,shake=0;
+let coins=Number(localStorage.getItem('pqCoins')||0),skin=localStorage.getItem('pqSkin')||'Classic',owned=JSON.parse(localStorage.getItem('pqOwned')||'["Classic"]');
+let player,worldW,solids,blocks,coinItems,enemies,mushrooms,spikes,springs,movers,flag,mapTheme;
 
-      <input id="email" placeholder="Email">
-      <input id="password" type="password" placeholder="Mật khẩu">
+function save(){localStorage.setItem('pqCoins',coins);localStorage.setItem('pqSkin',skin);localStorage.setItem('pqOwned',JSON.stringify(owned));}
+function ui(){scoreEl.textContent=score;coinsEl.textContent=coins;levelEl.textContent=level;skinEl.textContent=skin;}
+function rect(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
+function addGround(a,b,y=430,type='ground'){for(let x=a;x<b;x+=48)solids.push({x,y,w:48,h:H-y,type});}
+function addPlat(x,y,w,type='brick'){solids.push({x,y,w,h:24,type});}
+function addBlock(x,y,reward='coin'){blocks.push({x,y,w:44,h:44,used:false,reward,bump:0});}
+function addCoinLine(x,y,count,dx=42){for(let i=0;i<count;i++)coinItems.push({x:x+i*dx,y,w:22,h:22,active:true,float:i});}
+function palette(){if(skin==='Gold')return{hat:'#facc15',shirt:'#eab308',pants:'#92400e',face:'#fed7aa'};if(skin==='Night')return{hat:'#7c3aed',shirt:'#312e81',pants:'#111827',face:'#e9d5ff'};if(skin==='Frog')return{hat:'#16a34a',shirt:'#22c55e',pants:'#166534',face:'#bbf7d0'};return{hat:'#ef4444',shirt:'#2563eb',pants:'#1d4ed8',face:'#fed7aa'};}
 
-      <button id="registerBtn" class="blue">Đăng ký</button>
-      <button id="loginBtn" class="green">Đăng nhập</button>
-      <button id="logoutBtn" class="red">Đăng xuất</button>
+function buildLevel(){
+  cameraX=0;shake=0;
+  player={x:80,y:320,w:34,h:46,vx:0,vy:0,onGround:false,face:1,big:false,inv:0};
+  solids=[];blocks=[];coinItems=[];enemies=[];mushrooms=[];spikes=[];springs=[];movers=[];
+  worldW=3000;flag={x:2820,y:190,w:18,h:240};mapTheme='grass';
 
-      <div id="userBox">Chưa đăng nhập</div>
-    </div>
-  </div>
-</section>
+  if(level===0){
+    mapTheme='grass';worldW=2800;flag.x=2620;addGround(0,2800,430,'grass');
+    addPlat(520,330,260,'brick');addPlat(1080,315,220,'brick');addPlat(1660,300,260,'brick');
+    addBlock(600,215,'mushroom');addBlock(670,215,'coin');addBlock(1150,200,'coin');addBlock(1735,185,'mushroom');
+    addCoinLine(310,285,5);addCoinLine(900,250,6);addCoinLine(1450,240,5);addCoinLine(2140,285,6);
+    enemies.push(enemy(900,394,-1.0));enemies.push(enemy(2050,394,-1.1));
+  }
+  if(level===1){
+    mapTheme='city';worldW=3100;flag.x=2920;addGround(0,3100,430,'road');
+    solids.push({x:420,y:350,w:90,h:80,type:'pipe'},{x:1280,y:350,w:105,h:80,type:'pipe'},{x:2260,y:350,w:90,h:80,type:'pipe'});
+    addPlat(720,315,240,'metal');addPlat(1040,270,180,'metal');addPlat(1580,315,260,'metal');addPlat(2020,285,240,'metal');
+    addBlock(790,200,'mushroom');addBlock(1110,155,'coin');addBlock(1660,200,'coin');addBlock(2090,170,'mushroom');
+    addCoinLine(560,270,5);addCoinLine(1440,250,6);addCoinLine(2380,275,5);
+    enemies.push(enemy(700,394,-1.1));enemies.push(enemy(1500,394,-1.15));enemies.push(enemy(2480,394,-1.2));
+  }
+  if(level===2){
+    mapTheme='cave';worldW=3200;flag.x=3000;addGround(0,880,430,'stone');addGround(1080,1740,430,'stone');addGround(1980,3200,430,'stone');
+    springs.push({x:930,y:400,w:34,h:30});springs.push({x:1810,y:400,w:34,h:30});
+    addPlat(520,330,250,'stonePlat');addPlat(1180,290,220,'stonePlat');addPlat(1560,245,220,'stonePlat');addPlat(2120,310,260,'stonePlat');addPlat(2520,260,230,'stonePlat');
+    addBlock(610,215,'mushroom');addBlock(1250,175,'coin');addBlock(1630,130,'mushroom');addBlock(2200,195,'coin');
+    addCoinLine(340,260,5);addCoinLine(1160,230,6);addCoinLine(2100,250,7);
+    enemies.push(enemy(720,394,-1.2));enemies.push(enemy(1320,394,-1.1));enemies.push(enemy(2360,394,-1.25));
+  }
+  if(level===3){
+    mapTheme='lava';worldW=3300;flag.x=3100;addGround(0,780,430,'dark');addGround(980,1580,430,'dark');addGround(1820,3300,430,'dark');
+    springs.push({x:820,y:400,w:34,h:30});springs.push({x:1640,y:400,w:34,h:30});
+    addPlat(440,325,240,'darkBrick');addPlat(1120,285,260,'darkBrick');addPlat(1980,300,240,'darkBrick');addPlat(2460,255,240,'darkBrick');
+    addBlock(520,210,'mushroom');addBlock(1200,170,'coin');addBlock(2060,185,'mushroom');addBlock(2540,140,'coin');
+    spikes.push({x:900,y:404,w:42,h:26},{x:1740,y:404,w:42,h:26},{x:2300,y:404,w:42,h:26});
+    addCoinLine(300,250,5);addCoinLine(1080,230,7);addCoinLine(2100,240,6);addCoinLine(2700,260,5);
+    enemies.push(enemy(620,394,-1.25));enemies.push(enemy(1280,394,-1.2));enemies.push(enemy(2180,394,-1.3));enemies.push(enemy(2800,394,-1.25));
+  }
+  if(level===4){
+    mapTheme='castle';worldW=3500;flag.x=3300;addGround(0,820,430,'castle');addGround(1080,1660,430,'castle');addGround(1980,3500,430,'castle');
+    springs.push({x:870,y:400,w:34,h:30});springs.push({x:1740,y:400,w:34,h:30});
+    movers.push({x:1120,y:315,w:170,h:22,type:'move',baseX:1120,range:190,vx:1.45});movers.push({x:1700,y:280,w:160,h:22,type:'move',baseX:1700,range:170,vx:1.6});movers.push({x:2520,y:300,w:150,h:22,type:'move',baseX:2520,range:180,vx:1.5});
+    addPlat(500,320,240,'castlePlat');addPlat(2060,315,240,'castlePlat');addPlat(2860,270,220,'castlePlat');
+    addBlock(580,205,'mushroom');addBlock(2140,200,'coin');addBlock(2920,155,'mushroom');
+    spikes.push({x:940,y:404,w:42,h:26},{x:1880,y:404,w:42,h:26},{x:2380,y:404,w:42,h:26},{x:3060,y:404,w:42,h:26});
+    addCoinLine(330,250,6);addCoinLine(1210,240,6);addCoinLine(2100,250,6);addCoinLine(2800,225,6);
+    enemies.push(enemy(650,394,-1.25));enemies.push(enemy(1450,394,-1.3));enemies.push(enemy(2200,394,-1.35));enemies.push(enemy(2750,394,-1.35));enemies.push(enemy(3150,394,-1.4));
+  }
+}
+function enemy(x,y,vx){return{x,y,w:34,h:36,vx,alive:true};}
+function start(){level=0;score=0;state='playing';buildLevel();ui();}
+function next(){score+=500+level*80;if(level<MAX_LEVEL){level++;buildLevel();state='playing'}else{state='win'}ui();}
+function hurt(){if(player.inv>0)return;if(player.big){player.big=false;player.h=46;player.y+=14;player.inv=100;shake=10}else{state='dead';shake=16}ui();}
+function buy(name,price){if(owned.includes(name)){skin=name;save();ui();return alert('Đang dùng '+name)}if(coins<price)return alert('Không đủ xu');coins-=price;owned.push(name);skin=name;save();ui();}
+function spawnReward(b){b.used=true;b.bump=10;if(b.reward==='mushroom'){mushrooms.push({x:b.x+7,y:b.y-36,w:30,h:30,vx:1.2,vy:-5.5,active:true,spawn:24});score+=100}else{coins+=3;score+=75;save()}ui();}
 
-<section class="main-layout">
+function update(){
+  if(state!=='playing')return;
+  updateMovers();playerInput();updateEnemies();updateMushrooms();updateCoinsAndHazards();cameraX=Math.max(0,Math.min(worldW-W,player.x-360));if(player.y>700)state='dead';if(rect(player,flag))next();ui();
+}
+function playerInput(){
+  const left=keys.ArrowLeft||keys.KeyA,right=keys.ArrowRight||keys.KeyD,jump=keys.Space||keys.KeyW||keys.ArrowUp;
+  player.vx=0;if(left){player.vx=-4.7;player.face=-1}if(right){player.vx=4.7;player.face=1}if(jump&&player.onGround){player.vy=-16.2;player.onGround=false}
+  player.vy+=GRAVITY;if(player.vy>15)player.vy=15;if(player.inv>0)player.inv--;
+  player.x+=player.vx;collideAxis('x');player.y+=player.vy;player.onGround=false;collideAxis('y');
+}
+function allSolids(){return solids.concat(movers).concat(blocks);}
+function collideAxis(axis){for(const b of allSolids()){if(!rect(player,b))continue;if(axis==='x'){if(player.vx>0)player.x=b.x-player.w;if(player.vx<0)player.x=b.x+b.w}else{if(player.vy>0){player.y=b.y-player.h;player.vy=0;player.onGround=true}if(player.vy<0){player.y=b.y+b.h;player.vy=0;if(blocks.includes(b)&&!b.used)spawnReward(b)}}}}
+function updateMovers(){movers.forEach(m=>{m.x+=m.vx;if(m.x>m.baseX+m.range||m.x<m.baseX-m.range)m.vx*=-1;const standing=player.y+player.h<=m.y+12&&player.y+player.h>=m.y-9&&player.x+player.w>m.x&&player.x<m.x+m.w&&player.vy>=0;if(standing)player.x+=m.vx});}
+function updateEnemies(){enemies.forEach(e=>{if(!e.alive)return;e.x+=e.vx;const foot={x:e.vx<0?e.x-4:e.x+e.w+4,y:e.y+e.h+3,w:4,h:4};if(!solids.concat(movers).some(s=>rect(foot,s)))e.vx*=-1;for(const s of solids.concat(movers)){if(rect(e,s)){e.vx*=-1;e.x+=e.vx*5}}if(rect(player,e)){if(player.vy>0&&player.y+player.h-e.y<18){e.alive=false;player.vy=-9.5;score+=120}else hurt()}});}
+function updateMushrooms(){mushrooms.forEach(m=>{if(!m.active)return;if(m.spawn>0){m.spawn--;m.y+=m.vy;m.vy+=.22;return}m.vy+=GRAVITY;if(m.vy>12)m.vy=12;m.x+=m.vx;for(const s of solids.concat(movers)){if(rect(m,s)){if(m.vx>0)m.x=s.x-m.w;else m.x=s.x+s.w;m.vx*=-1}}m.y+=m.vy;for(const s of solids.concat(movers)){if(rect(m,s)&&m.vy>0){m.y=s.y-m.h;m.vy=0}}if(rect(player,{x:m.x-8,y:m.y-8,w:m.w+16,h:m.h+16})){m.active=false;if(!player.big){player.big=true;player.h=60;player.y-=14}coins+=5;score+=250;save();ui()}});mushrooms=mushrooms.filter(m=>m.active&&m.y<650);}
+function updateCoinsAndHazards(){coinItems.forEach(c=>{if(c.active&&rect(player,c)){c.active=false;coins++;score+=25;save()}});spikes.forEach(s=>{if(rect(player,s))hurt()});springs.forEach(s=>{if(rect(player,s)&&player.vy>0){player.y=s.y-player.h;player.vy=-19;player.onGround=false;score+=10}});blocks.forEach(b=>{if(b.bump>0)b.bump--});}
 
-  <div class="left">
+function draw(){
+  ctx.save();if(shake>0){ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake--}
+  drawBackground();solids.forEach(drawSolid);movers.forEach(drawSolid);blocks.forEach(drawBlock);coinItems.forEach(drawCoin);mushrooms.forEach(drawMushroom);enemies.forEach(drawEnemy);spikes.forEach(drawSpike);springs.forEach(drawSpring);drawFlag();drawPlayer();drawHUD();if(state==='menu')message('Plumber Quest','Bấm Bắt đầu để chơi');if(state==='dead')message('Game Over','Bấm Chơi lại để thử lại');if(state==='win')message('Bạn đã thắng!','Hoàn thành toàn bộ 5 map');ctx.restore();
+}
+function drawBackground(){
+  const colors={grass:['#38bdf8','#60a5fa','#166534'],city:['#60a5fa','#93c5fd','#334155'],cave:['#1e293b','#334155','#292524'],lava:['#7f1d1d','#ef4444','#451a03'],castle:['#475569','#1e293b','#111827']};const c=colors[mapTheme]||colors.grass;let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,c[0]);g.addColorStop(.72,c[1]);g.addColorStop(1,c[2]);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  if(mapTheme!=='cave'&&mapTheme!=='castle'){for(let i=0;i<7;i++){let x=(i*360-cameraX*.25)%1100;if(x<-100)x+=1100;cloud(x,70+(i%3)*40)}}
+  if(mapTheme==='grass'||mapTheme==='city'){ctx.fillStyle='rgba(22,101,52,.35)';for(let i=0;i<5;i++){let x=i*650-cameraX*.35;ctx.beginPath();ctx.arc(x+180,430,160,Math.PI,0);ctx.fill()}}
+  if(mapTheme==='lava'){ctx.fillStyle='rgba(251,146,60,.7)';for(let x=-cameraX%120;x<W;x+=120)ctx.fillRect(x,452,90,20)}
+}
+function cloud(x,y){ctx.fillStyle='rgba(255,255,255,.86)';ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.arc(x+26,y-12,28,0,Math.PI*2);ctx.arc(x+58,y,22,0,Math.PI*2);ctx.fill()}
+function drawSolid(s){const x=s.x-cameraX;if(x<-140||x>W+140)return;if(s.type==='pipe'){ctx.fillStyle='#15803d';ctx.fillRect(x,s.y,s.w,s.h);ctx.fillStyle='#22c55e';ctx.fillRect(x-8,s.y,s.w+16,20);ctx.fillStyle='rgba(255,255,255,.25)';ctx.fillRect(x+10,s.y+24,12,s.h-30);return}const col={grass:'#166534',road:'#475569',brick:'#b45309',metal:'#64748b',stone:'#57534e',stonePlat:'#78716c',dark:'#27272a',darkBrick:'#7f1d1d',castle:'#334155',castlePlat:'#64748b',move:'#6366f1'}[s.type]||'#166534';ctx.fillStyle=col;ctx.fillRect(x,s.y,s.w,s.h);ctx.strokeStyle='rgba(0,0,0,.22)';ctx.strokeRect(x,s.y,s.w,s.h);if(s.type==='ground'||s.type==='grass'||s.type==='dark'||s.type==='castle'){ctx.fillStyle='rgba(0,0,0,.13)';for(let tx=x;tx<x+s.w;tx+=24)ctx.fillRect(tx,s.y,2,s.h)}}
+function drawBlock(b){const x=b.x-cameraX,y=b.y-(b.bump||0);ctx.fillStyle=b.used?'#78716c':'#facc15';ctx.fillRect(x,y,b.w,b.h);ctx.strokeStyle='#92400e';ctx.strokeRect(x,y,b.w,b.h);if(!b.used){ctx.fillStyle='#422006';ctx.font='900 28px Arial';ctx.fillText('?',x+13,y+32)}}
+function drawCoin(c){if(!c.active)return;const y=c.y+Math.sin((performance.now()/170)+c.float)*4;ctx.beginPath();ctx.arc(c.x-cameraX+11,y+11,11,0,Math.PI*2);ctx.fillStyle='#facc15';ctx.fill();ctx.strokeStyle='#92400e';ctx.lineWidth=2;ctx.stroke();ctx.lineWidth=1}
+function drawMushroom(m){if(!m.active)return;const x=m.x-cameraX,y=m.y;ctx.fillStyle='#ef4444';ctx.fillRect(x,y+4,m.w,15);ctx.fillStyle='white';ctx.fillRect(x+5,y+7,7,7);ctx.fillRect(x+18,y+7,7,7);ctx.fillStyle='#fed7aa';ctx.fillRect(x+7,y+18,16,12);ctx.fillStyle='#020617';ctx.fillRect(x+11,y+22,3,3);ctx.fillRect(x+19,y+22,3,3)}
+function drawEnemy(e){if(!e.alive)return;const x=e.x-cameraX,y=e.y;ctx.fillStyle='#7c2d12';ctx.fillRect(x,y+8,e.w,e.h-8);ctx.fillStyle='#a16207';ctx.fillRect(x+3,y,e.w-6,14);ctx.fillStyle='white';ctx.fillRect(x+7,y+12,6,6);ctx.fillRect(x+21,y+12,6,6);ctx.fillStyle='black';ctx.fillRect(x+9,y+14,3,3);ctx.fillRect(x+23,y+14,3,3)}
+function drawSpike(s){const x=s.x-cameraX,y=s.y;ctx.fillStyle='#e5e7eb';ctx.beginPath();ctx.moveTo(x,y+s.h);ctx.lineTo(x+s.w/2,y);ctx.lineTo(x+s.w,y+s.h);ctx.closePath();ctx.fill();ctx.strokeStyle='#64748b';ctx.stroke()}
+function drawSpring(s){const x=s.x-cameraX,y=s.y;ctx.fillStyle='#38bdf8';ctx.fillRect(x,y+18,s.w,12);ctx.strokeStyle='white';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x+4,y+18);ctx.lineTo(x+10,y+6);ctx.lineTo(x+18,y+18);ctx.lineTo(x+26,y+6);ctx.lineTo(x+32,y+18);ctx.stroke();ctx.lineWidth=1}
+function drawFlag(){const x=flag.x-cameraX;ctx.fillStyle='#713f12';ctx.fillRect(x,flag.y,8,flag.h);ctx.fillStyle='#22c55e';ctx.fillRect(x+8,flag.y+10,74,42);ctx.fillStyle='white';ctx.font='900 19px Arial';ctx.fillText(level<MAX_LEVEL?'NEXT':'WIN',x+17,flag.y+38)}
+function drawPlayer(){const p=palette(),x=Math.floor(player.x-cameraX),y=Math.floor(player.y);ctx.save();if(player.inv>0&&Math.floor(player.inv/5)%2===0)ctx.globalAlpha=.45;if(player.face<0){ctx.translate(x+17,y);ctx.scale(-1,1);ctx.translate(-(x+17),-y)}ctx.fillStyle=p.pants;ctx.fillRect(x+7,y+player.h-14,8,16);ctx.fillRect(x+21,y+player.h-14,8,16);ctx.fillStyle=p.shirt;ctx.fillRect(x+5,y+player.h-30,25,20);ctx.fillStyle=p.face;ctx.fillRect(x+7,y+6,23,17);ctx.fillStyle=p.hat;ctx.fillRect(x+4,y+1,27,8);ctx.fillRect(x+18,y+8,17,5);ctx.fillStyle='#020617';ctx.fillRect(x+23,y+11,4,4);ctx.fillRect(x+20,y+18,12,4);ctx.fillStyle=p.face;ctx.fillRect(x+29,y+player.h-26,8,10);if(player.big){ctx.fillStyle='white';ctx.font='900 12px Arial';ctx.fillText('BIG',x-2,y-6)}ctx.restore()}
+function drawHUD(){ctx.fillStyle='rgba(2,6,23,.68)';ctx.fillRect(16,14,390,50);ctx.fillStyle='white';ctx.font='900 22px Arial';ctx.fillText('Level '+level+'   Score '+score+'   Coins '+coins,30,47)}
+function message(a,b){ctx.fillStyle='rgba(2,6,23,.76)';ctx.fillRect(240,165,480,170);ctx.fillStyle='white';ctx.textAlign='center';ctx.font='900 44px Arial';ctx.fillText(a,480,230);ctx.font='21px Arial';ctx.fillText(b,480,278);ctx.textAlign='left'}
+function loop(){update();draw();requestAnimationFrame(loop)}
 
-    <div class="card">
-      <canvas id="game" width="960" height="540"></canvas>
-
-      <div class="mobile">
-        <button id="leftBtn">⬅</button>
-        <button id="jumpBtn">⬆</button>
-        <button id="rightBtn">➡</button>
-      </div>
-    </div>
-
-    <div class="card ad-card">
-      <div class="ad-title">Quảng cáo</div>
-
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-1057751843910706"
-           data-ad-slot="6646434479"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
-
-  </div>
-
-  <aside class="right">
-
-    <div class="card stats">
-
-      <div class="stat">
-        <span>Điểm</span>
-        <strong id="score">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>Xu</span>
-        <strong id="coins">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>Level</span>
-        <strong id="level">1</strong>
-      </div>
-
-      <div class="stat">
-        <span>Skin</span>
-        <strong id="skinName">Classic</strong>
-      </div>
-
-    </div>
-
-    <div class="card">
-      <button id="startBtn" class="green">▶ Chơi ngay</button>
-      <button id="saveBtn" class="blue">☁ Save Cloud</button>
-      <button id="helpBtn" class="gray">❔ Hướng dẫn</button>
-    </div>
-
-    <div class="card">
-      <h3>Shop Skin</h3>
-
-      <button class="skinBtn red" data-skin="Classic">Classic (Free)</button>
-      <button class="skinBtn yellow" data-skin="Gold">Gold (100 xu)</button>
-      <button class="skinBtn purple" data-skin="Ninja">Ninja (200 xu)</button>
-      <button class="skinBtn green" data-skin="Frog">Frog (300 xu)</button>
-      <button class="skinBtn blue" data-skin="Galaxy">Galaxy (500 xu)</button>
-    </div>
-
-    <div class="card">
-      <h3>🏆 Leaderboard</h3>
-      <ol id="leaderboard"></ol>
-    </div>
-
-  </aside>
-
-</section>
-
-<footer>
-© 2026 Yah Games • Plumber Quest PRO HD
-</footer>
-
-<script src="supabase.js"></script>
-<script src="auth.js"></script>
-<script src="leaderboard.js"></script>
-<script src="game.js"></script>
-
+window.addEventListener('keydown',e=>{keys[e.code]=true;if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault()});
+window.addEventListener('keyup',e=>keys[e.code]=false);
+function hold(btn,code){btn.addEventListener('pointerdown',()=>keys[code]=true);btn.addEventListener('pointerup',()=>keys[code]=false);btn.addEventListener('pointerleave',()=>keys[code]=false)}
+hold(document.getElementById('leftBtn'),'ArrowLeft');hold(document.getElementById('rightBtn'),'ArrowRight');hold(document.getElementById('jumpBtn'),'Space');
+document.getElementById('startBtn').onclick=start;
+document.getElementById('helpBtn').onclick=()=>alert('A/D hoặc ←/→ để đi. Space/W/↑ để nhảy. Đập block ? từ dưới để lấy xu hoặc nấm. Ăn nấm để lớn lên. Chạm cờ để sang map tiếp theo.');
+document.getElementById('classicBtn').onclick=()=>buy('Classic',0);document.getElementById('goldBtn').onclick=()=>buy('Gold',80);document.getElementById('nightBtn').onclick=()=>buy('Night',150);document.getElementById('frogBtn').onclick=()=>buy('Frog',220);
+buildLevel();ui();loop();
+</script>
 </body>
 </html>
