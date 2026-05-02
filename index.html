@@ -3,611 +3,141 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>🍄 Plumber Quest PRO MAX</title>
-<meta name="description" content="Game platformer Mario-like tiếng Việt: chạy nhảy, 5 map, skin nhân vật, Supabase leaderboard, cloud save.">
+<title>Plumber Quest PRO HD - Yah Games</title>
+<meta name="description" content="Game platformer hiện đại miễn phí. Chạy nhảy, ăn xu, vượt màn, đăng nhập online, leaderboard và skin cực đẹp.">
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:linear-gradient(180deg,#0f172a,#020617);
-  color:#fff;
-}
-header{
-  position:sticky;top:0;z-index:99;
-  background:#020617ee;
-  border-bottom:1px solid #334155;
-  padding:12px;
-}
-.topbar{
-  max-width:1450px;
-  margin:auto;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-.logo{
-  font-size:34px;
-  font-weight:900;
-  margin-right:auto;
-}
-input{
-  padding:10px;
-  border:none;
-  border-radius:12px;
-  width:220px;
-}
-button,a.btn{
-  border:none;
-  border-radius:12px;
-  padding:10px 14px;
-  font-weight:900;
-  cursor:pointer;
-  text-decoration:none;
-  display:inline-block;
-}
-.green{background:#22c55e;color:#052e16}
-.blue{background:#38bdf8;color:#082f49}
-.red{background:#ef4444;color:#fff}
-.yellow{background:#facc15;color:#422006}
-.purple{background:#a78bfa;color:#2e1065}
-.gray{background:#334155;color:#fff}
-.orange{background:#fb923c;color:#431407}
+<link rel="stylesheet" href="style.css">
 
-.wrap{
-  max-width:1450px;
-  margin:auto;
-  padding:16px;
-}
+<!-- Adsense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1057751843910706" crossorigin="anonymous"></script>
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr 380px;
-  gap:16px;
-}
-
-.card{
-  background:#0f172a;
-  border:1px solid #334155;
-  border-radius:24px;
-  padding:16px;
-}
-
-canvas{
-  width:100%;
-  aspect-ratio:16/9;
-  display:block;
-  border-radius:18px;
-  background:#38bdf8;
-  image-rendering:pixelated;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-bottom:14px;
-}
-.stat{
-  background:#1e293b;
-  border-radius:14px;
-  padding:12px;
-}
-.stat small{color:#94a3b8}
-.stat strong{
-  display:block;
-  margin-top:6px;
-  font-size:24px;
-}
-
-h2{margin-bottom:10px}
-h3{margin:14px 0 8px}
-p,li{color:#cbd5e1;line-height:1.5}
-ul{padding-left:18px}
-
-.side button,.side a{
-  width:100%;
-  margin-top:8px;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  padding:8px;
-  border-bottom:1px solid #1e293b;
-  font-size:14px;
-}
-
-.skin-box{
-  margin-top:8px;
-  padding:10px;
-  border-radius:12px;
-  background:#1e293b;
-  font-size:14px;
-}
-
-footer{
-  text-align:center;
-  color:#94a3b8;
-  padding:30px;
-}
-
-@media(max-width:980px){
-.grid{grid-template-columns:1fr}
-input{width:100%}
-}
-</style>
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-<header>
-<div class="topbar">
-<div class="logo">🍄 Plumber Quest PRO MAX</div>
+<header class="topbar">
+  <div class="logo">🍄 Plumber Quest PRO HD</div>
 
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Mật khẩu">
-
-<button class="green" onclick="dangKy()">Đăng ký</button>
-<button class="blue" onclick="dangNhap()">Đăng nhập</button>
-<button class="red" onclick="dangXuat()">Đăng xuất</button>
-
-</div>
+  <nav>
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="https://paypal.me/HAThi247/1" target="_blank">Ủng hộ ❤️</a>
+  </nav>
 </header>
 
-<div class="wrap">
-
-<div class="grid">
-
-<!-- GAME -->
-<div class="card">
-<canvas id="game" width="1280" height="720"></canvas>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
-<button class="green" onclick="batDau()">▶ Bắt đầu</button>
-<button class="blue" onclick="luuCloud()">☁ Lưu Cloud</button>
-<button class="yellow" onclick="taiCloud()">⬇ Tải Cloud</button>
-<button class="gray" onclick="huongDan()">❔ Hướng dẫn</button>
-</div>
-</div>
-
-<!-- SIDE -->
-<div class="card side">
-
-<div class="stats">
-<div class="stat"><small>Điểm</small><strong id="score">0</strong></div>
-<div class="stat"><small>Xu</small><strong id="coins">0</strong></div>
-<div class="stat"><small>Level</small><strong id="level">1</strong></div>
-<div class="stat"><small>Skin</small><strong id="skin">Classic</strong></div>
-</div>
-
-<h2>🎨 Shop Skin</h2>
-
-<button class="red" onclick="muaSkin('Classic',0)">Classic - Miễn phí</button>
-<div class="skin-box">👨 Mario đỏ cổ điển.</div>
-
-<button class="yellow" onclick="muaSkin('Gold',80)">Gold - 80 xu</button>
-<div class="skin-box">👑 Mario vàng óng ánh.</div>
-
-<button class="purple" onclick="muaSkin('Night',150)">Night - 150 xu</button>
-<div class="skin-box">🌙 Mario bóng tối tím.</div>
-
-<button class="green" onclick="muaSkin('Entity',250)">Entity - 250 xu</button>
-<div class="skin-box">🧟 Skin bí ẩn màu xanh.</div>
-
-<button class="blue" onclick="muaSkin('Ghost',400)">Ghost - 400 xu</button>
-<div class="skin-box">👻 Mario ma trong suốt.</div>
-
-<h2 style="margin-top:18px">🏆 Leaderboard</h2>
-<div id="leaderboard">Đang tải...</div>
-
-<a class="btn orange" href="https://paypal.me/HAThi247/1" target="_blank" style="margin-top:14px">💖 Quyên góp</a>
-
-</div>
-</div>
-
-<!-- ABOUT -->
-<div class="card" style="margin-top:16px">
-<h2>📘 About</h2>
-<p>Plumber Quest PRO MAX là game platformer HTML5 lấy cảm hứng từ Mario cổ điển.</p>
-<ul>
-<li>5 bản đồ khác nhau</li>
-<li>Chạy, nhảy, ăn xu</li>
-<li>Mở khóa skin</li>
-<li>Cloud save Supabase</li>
-<li>Leaderboard online</li>
-</ul>
-</div>
-
-<!-- PRIVACY -->
-<div class="card" style="margin-top:16px">
-<h2>🔒 Privacy</h2>
-<p>Email chỉ dùng để đăng nhập và lưu tiến trình game.</p>
-<p>Không bán dữ liệu người dùng.</p>
-</div>
-
-<!-- ADS -->
-<div class="card" style="margin-top:16px">
-<h2>📄 ads.txt</h2>
-<p>google.com, pub-1057751843910706, DIRECT, f08c47fec0942fa0</p>
-</div>
-
-</div>
-
-<footer>© 2026 Yah Games</footer>
-
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
-const supabase=createClient(
-'https://gkxzlfaoshjgbatmfnyl.supabase.co',
-'YOUR_ANON_KEY'
-)
-
-/* DOM */
-const canvas=document.getElementById("game")
-const ctx=canvas.getContext("2d")
-
-const scoreEl=document.getElementById("score")
-const coinsEl=document.getElementById("coins")
-const levelEl=document.getElementById("level")
-const skinEl=document.getElementById("skin")
-
-/* GAME */
-let gravity=.75
-let keys={}
-let game=false
-let camX=0
-
-let score=0
-let coins=0
-let level=1
-let skin="Classic"
-let owned=["Classic"]
-
-let player
-let plats=[]
-let coinMap=[]
-let enemies=[]
-let flag={x:3200,y:520,w:40,h:120}
-
-/* player */
-function resetPlayer(){
-player={
-x:100,y:100,w:44,h:54,
-vx:0,vy:0,
-ground:false
-}
-}
-
-/* level */
-function taoMap(){
-plats=[]
-coinMap=[]
-enemies=[]
-
-flag.x=2600+level*250
-
-for(let i=0;i<70;i++){
-plats.push({x:i*90,y:620,w:90,h:120})
-}
-
-for(let i=0;i<14;i++){
-plats.push({
-x:280+i*190,
-y:470-Math.sin(i+level)*140,
-w:130,h:24
-})
-}
-
-for(let i=0;i<28;i++){
-coinMap.push({
-x:240+i*105,
-y:330+Math.sin(i)*90,
-r:12,
-hit:false
-})
-}
-
-for(let i=0;i<5+level;i++){
-enemies.push({
-x:600+i*360,
-y:582,
-w:42,h:38,
-vx:2+level*0.3
-})
-}
-}
-
-function batDau(){
-score=0
-level=1
-game=true
-vaoLevel()
-}
-
-window.batDau=batDau
-
-function vaoLevel(){
-if(level>5){
-alert("🏆 Bạn đã thắng toàn bộ game!")
-luuCloud()
-game=false
-return
-}
-resetPlayer()
-taoMap()
-capNhatUI()
-}
-
-function capNhatUI(){
-scoreEl.textContent=score
-coinsEl.textContent=coins
-levelEl.textContent=level
-skinEl.textContent=skin
-}
-
-function cham(a,b){
-return a.x<b.x+b.w &&
-a.x+a.w>b.x &&
-a.y<b.y+b.h &&
-a.y+a.h>b.y
-}
-
-/* update */
-function update(){
-
-if(!game)return
-
-player.vx=0
-
-if(keys["ArrowLeft"]||keys["KeyA"])player.vx=-5
-if(keys["ArrowRight"]||keys["KeyD"])player.vx=5
-
-if((keys["Space"]||keys["ArrowUp"]||keys["KeyW"]) && player.ground){
-player.vy=-15
-player.ground=false
-}
-
-player.vy+=gravity
-player.x+=player.vx
-player.y+=player.vy
-player.ground=false
-
-for(let p of plats){
-if(cham(player,p)){
-if(player.vy>=0 && player.y+player.h-player.vy<=p.y+4){
-player.y=p.y-player.h
-player.vy=0
-player.ground=true
-}
-}
-}
-
-/* coin */
-for(let c of coinMap){
-if(!c.hit){
-let box={x:c.x-c.r,y:c.y-c.r,w:c.r*2,h:c.r*2}
-if(cham(player,box)){
-c.hit=true
-coins++
-score+=50
-}
-}
-}
-
-/* enemies */
-for(let e of enemies){
-e.x+=e.vx
-if(Math.random()<0.01)e.vx*=-1
-
-if(cham(player,e)){
-if(player.vy>0){
-e.dead=true
-player.vy=-10
-score+=120
-}else{
-resetPlayer()
-}
-}
-}
-enemies=enemies.filter(e=>!e.dead)
-
-/* rơi */
-if(player.y>900){
-resetPlayer()
-}
-
-/* qua màn */
-if(cham(player,flag)){
-score+=500
-level++
-vaoLevel()
-}
-
-camX=player.x-260
-if(camX<0)camX=0
-
-capNhatUI()
-}
-
-/* draw */
-function draw(){
-let g=ctx.createLinearGradient(0,0,0,720)
-g.addColorStop(0,"#38bdf8")
-g.addColorStop(1,"#1d4ed8")
-ctx.fillStyle=g
-ctx.fillRect(0,0,1280,720)
-
-ctx.save()
-ctx.translate(-camX,0)
-
-/* nền đất */
-for(let p of plats){
-ctx.fillStyle="#16a34a"
-ctx.fillRect(p.x,p.y,p.w,p.h)
-}
-
-/* coin */
-for(let c of coinMap){
-if(!c.hit){
-ctx.beginPath()
-ctx.arc(c.x,c.y,c.r,0,6.28)
-ctx.fillStyle="#facc15"
-ctx.fill()
-}
-}
-
-/* enemy */
-for(let e of enemies){
-ctx.fillStyle="#7c2d12"
-ctx.fillRect(e.x,e.y,e.w,e.h)
-}
-
-/* cờ */
-ctx.fillStyle="#22c55e"
-ctx.fillRect(flag.x,flag.y,flag.w,flag.h)
-
-/* player */
-vePlayer()
-
-ctx.restore()
-
-ctx.fillStyle="#fff"
-ctx.font="bold 26px Arial"
-ctx.fillText("Level "+level,20,34)
-}
-
-function vePlayer(){
-
-const mau={
-Classic:"#ef4444",
-Gold:"#facc15",
-Night:"#7c3aed",
-Entity:"#22c55e",
-Ghost:"#e2e8f0"
-}
-
-ctx.fillStyle=mau[skin]||"#ef4444"
-ctx.fillRect(player.x,player.y,player.w,player.h)
-}
-
-/* loop */
-function loop(){
-update()
-draw()
-requestAnimationFrame(loop)
-}
-loop()
-
-/* controls */
-addEventListener("keydown",e=>keys[e.code]=true)
-addEventListener("keyup",e=>keys[e.code]=false)
-
-/* auth */
-window.dangKy=async()=>{
-const email=document.getElementById("email").value
-const password=document.getElementById("password").value
-
-const {error}=await supabase.auth.signUp({email,password})
-alert(error?error.message:"Đăng ký thành công")
-}
-
-window.dangNhap=async()=>{
-const email=document.getElementById("email").value
-const password=document.getElementById("password").value
-
-const {error}=await supabase.auth.signInWithPassword({email,password})
-alert(error?error.message:"Đăng nhập thành công")
-taiCloud()
-}
-
-window.dangXuat=async()=>{
-await supabase.auth.signOut()
-alert("Đã đăng xuất")
-}
-
-/* cloud */
-window.luuCloud=async()=>{
-const {data:{user}}=await supabase.auth.getUser()
-if(!user)return alert("Hãy đăng nhập")
-
-await supabase.from("leaderboard").upsert({
-email:user.email,
-score:score,
-coins:coins,
-skin:skin
-})
-
-alert("Đã lưu cloud")
-taiBang()
-}
-
-window.taiCloud=async()=>{
-const {data:{user}}=await supabase.auth.getUser()
-if(!user)return
-
-const {data}=await supabase
-.from("leaderboard")
-.select("*")
-.eq("email",user.email)
-.single()
-
-if(data){
-score=data.score||0
-coins=data.coins||0
-skin=data.skin||"Classic"
-capNhatUI()
-}
-}
-
-/* leaderboard */
-async function taiBang(){
-const {data}=await supabase
-.from("leaderboard")
-.select("*")
-.order("score",{ascending:false})
-.limit(10)
-
-let html=""
-if(data){
-data.forEach((r,i)=>{
-html+=`
-<div class="row">
-<span>${i+1}. ${r.email}</span>
-<b>${r.score}</b>
-</div>
-`
-})
-}
-document.getElementById("leaderboard").innerHTML=html||"Chưa có dữ liệu"
-}
-taiBang()
-
-/* shop */
-window.muaSkin=(name,price)=>{
-if(owned.includes(name)){
-skin=name
-capNhatUI()
-return
-}
-
-if(coins<price){
-alert("Không đủ xu")
-return
-}
-
-coins-=price
-owned.push(name)
-skin=name
-capNhatUI()
-}
-
-/* help */
-window.huongDan=()=>{
-alert("A/D hoặc ← → để chạy | Space để nhảy | Ăn xu | Đạp quái | Chạm cờ để qua màn.")
-}
-</script>
+<section class="hero">
+  <div class="hero-left">
+    <h1>Mario-like hiện đại cực đẹp</h1>
+    <p>Chạy, nhảy, ăn xu, mở skin, vượt 5 thế giới và leo top leaderboard online.</p>
+  </div>
+
+  <div class="hero-right">
+    <div class="card auth-box">
+      <h3>Tài khoản</h3>
+
+      <input id="email" placeholder="Email">
+      <input id="password" type="password" placeholder="Mật khẩu">
+
+      <button id="registerBtn" class="blue">Đăng ký</button>
+      <button id="loginBtn" class="green">Đăng nhập</button>
+      <button id="logoutBtn" class="red">Đăng xuất</button>
+
+      <div id="userBox">Chưa đăng nhập</div>
+    </div>
+  </div>
+</section>
+
+<section class="main-layout">
+
+  <div class="left">
+
+    <div class="card">
+      <canvas id="game" width="960" height="540"></canvas>
+
+      <div class="mobile">
+        <button id="leftBtn">⬅</button>
+        <button id="jumpBtn">⬆</button>
+        <button id="rightBtn">➡</button>
+      </div>
+    </div>
+
+    <div class="card ad-card">
+      <div class="ad-title">Quảng cáo</div>
+
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1057751843910706"
+           data-ad-slot="6646434479"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+  </div>
+
+  <aside class="right">
+
+    <div class="card stats">
+
+      <div class="stat">
+        <span>Điểm</span>
+        <strong id="score">0</strong>
+      </div>
+
+      <div class="stat">
+        <span>Xu</span>
+        <strong id="coins">0</strong>
+      </div>
+
+      <div class="stat">
+        <span>Level</span>
+        <strong id="level">1</strong>
+      </div>
+
+      <div class="stat">
+        <span>Skin</span>
+        <strong id="skinName">Classic</strong>
+      </div>
+
+    </div>
+
+    <div class="card">
+      <button id="startBtn" class="green">▶ Chơi ngay</button>
+      <button id="saveBtn" class="blue">☁ Save Cloud</button>
+      <button id="helpBtn" class="gray">❔ Hướng dẫn</button>
+    </div>
+
+    <div class="card">
+      <h3>Shop Skin</h3>
+
+      <button class="skinBtn red" data-skin="Classic">Classic (Free)</button>
+      <button class="skinBtn yellow" data-skin="Gold">Gold (100 xu)</button>
+      <button class="skinBtn purple" data-skin="Ninja">Ninja (200 xu)</button>
+      <button class="skinBtn green" data-skin="Frog">Frog (300 xu)</button>
+      <button class="skinBtn blue" data-skin="Galaxy">Galaxy (500 xu)</button>
+    </div>
+
+    <div class="card">
+      <h3>🏆 Leaderboard</h3>
+      <ol id="leaderboard"></ol>
+    </div>
+
+  </aside>
+
+</section>
+
+<footer>
+© 2026 Yah Games • Plumber Quest PRO HD
+</footer>
+
+<script src="supabase.js"></script>
+<script src="auth.js"></script>
+<script src="leaderboard.js"></script>
+<script src="game.js"></script>
 
 </body>
 </html>
