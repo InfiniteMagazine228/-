@@ -3,275 +3,56 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Plumber Quest - Yah Games</title>
+<title>Plumber Quest</title>
+<link rel="stylesheet" href="style.css">
 
-<style>
-*{box-sizing:border-box}
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#0f172a;
-color:#fff;
-}
-.wrap{
-width:min(1200px,100%);
-margin:auto;
-padding:20px;
-}
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:15px;
-padding:15px 0;
-flex-wrap:wrap;
-}
-h1{margin:0;font-size:32px}
-.topbar{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-input{
-padding:10px;
-border-radius:10px;
-border:0;
-width:180px;
-}
-button{
-padding:10px 14px;
-border:0;
-border-radius:10px;
-font-weight:700;
-cursor:pointer;
-}
-.blue{background:#38bdf8}
-.green{background:#22c55e}
-.red{background:#ef4444;color:#fff}
-.card{
-background:#111827;
-border-radius:18px;
-padding:18px;
-margin-top:18px;
-}
-.grid{
-display:grid;
-grid-template-columns:1fr 340px;
-gap:18px;
-}
-canvas{
-width:100%;
-aspect-ratio:16/9;
-display:block;
-background:#38bdf8;
-border-radius:18px;
-}
-#leaderboard div{
-padding:8px 0;
-border-bottom:1px solid rgba(255,255,255,.08);
-}
-@media(max-width:900px){
-.grid{grid-template-columns:1fr}
-input{width:100%}
-}
-</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="game.js" defer></script>
 </head>
-<body>
 
-<div class="wrap">
+<body>
 
 <header>
 <h1>🍄 Plumber Quest</h1>
 
-<div class="topbar">
+<div class="auth">
 <input id="email" placeholder="Email">
 <input id="password" type="password" placeholder="Password">
 
-<button class="green" onclick="register()">Register</button>
-<button class="blue" onclick="login()">Login</button>
-<button class="red" onclick="logout()">Logout</button>
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+<button onclick="logout()">Logout</button>
 </div>
 </header>
 
-<div class="grid">
+<main>
 
-<div class="card">
 <canvas id="game" width="960" height="540"></canvas>
 
-<div style="margin-top:15px;display:flex;gap:10px;flex-wrap:wrap">
-<button class="green" onclick="startGame()">Start Game</button>
-<button class="blue" onclick="saveScore()">Save Score</button>
-</div>
+<div class="panel">
 
-<p id="status">Chưa đăng nhập</p>
-<p>Score: <span id="score">0</span></p>
-</div>
+<h2>🎮 Player</h2>
+<p id="userText">Chưa đăng nhập</p>
+<p>Coins: <span id="coinText">0</span></p>
+<p>Skin: <span id="skinText">Classic</span></p>
 
-<div class="card">
+<button onclick="startGame()">Start Game</button>
+<button onclick="saveCloud()">Save Cloud</button>
+
+<h2>🛒 Shop</h2>
+
+<button onclick="buySkin('Classic',0)">Classic</button>
+<button onclick="buySkin('Mario',50)">Mario</button>
+<button onclick="buySkin('Entity',100)">Entity</button>
+<button onclick="buySkin('Ghost',150)">Ghost</button>
+
 <h2>🏆 Leaderboard</h2>
-<div id="leaderboard">Đang tải...</div>
-</div>
+<div id="leaderboard">Loading...</div>
 
 </div>
-</div>
 
-<!-- SUPABASE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabase = window.supabase.createClient(
-"https://gkxzlfaoshjgbatmfnyl.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdreHpsZmFvc2hqZ2JhdG1mbnlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjQ1MjAsImV4cCI6MjA5MzI0MDUyMH0.LzhQIbniEp42-h0MbNU4V1cfjNGoHykoLet5c479GSI"
-);
-
-let user = null;
-let score = 0;
-
-const scoreEl = document.getElementById("score");
-const statusEl = document.getElementById("status");
-const boardEl = document.getElementById("leaderboard");
-
-async function register(){
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
-
-const { error } = await supabase.auth.signUp({
-email,password
-});
-
-if(error) return alert(error.message);
-
-alert("Đăng ký thành công. Kiểm tra email.");
-}
-
-async function login(){
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
-
-const { data,error } = await supabase.auth.signInWithPassword({
-email,password
-});
-
-if(error) return alert(error.message);
-
-user = data.user;
-statusEl.innerText = "Đăng nhập: " + user.email;
-
-loadLeaderboard();
-}
-
-async function logout(){
-await supabase.auth.signOut();
-user = null;
-statusEl.innerText = "Đã logout";
-}
-
-async function checkUser(){
-const { data } = await supabase.auth.getUser();
-
-if(data.user){
-user = data.user;
-statusEl.innerText = "Đăng nhập: " + user.email;
-}
-}
-
-async function saveScore(){
-
-if(!user) return alert("Hãy login");
-
-const { error } = await supabase
-.from("leaderboard")
-.insert({
-email:user.email,
-score:score
-});
-
-if(error) return alert(error.message);
-
-alert("Đã lưu điểm");
-loadLeaderboard();
-}
-
-async function loadLeaderboard(){
-
-const { data,error } = await supabase
-.from("leaderboard")
-.select("*")
-.order("score",{ascending:false})
-.limit(20);
-
-if(error) return;
-
-boardEl.innerHTML = "";
-
-data.forEach((row,i)=>{
-boardEl.innerHTML += `
-<div>
-#${i+1} ${row.email} - ${row.score}
-</div>
-`;
-});
-}
-
-/* GAME */
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-let player = {x:60,y:420,w:40,h:40,vy:0};
-let gravity = 0.6;
-let running = false;
-
-function startGame(){
-score = 0;
-player.x = 60;
-player.y = 420;
-running = true;
-loop();
-}
-
-function loop(){
-
-if(!running) return;
-
-requestAnimationFrame(loop);
-
-ctx.clearRect(0,0,960,540);
-
-player.vy += gravity;
-player.y += player.vy;
-
-if(player.y > 420){
-player.y = 420;
-player.vy = 0;
-}
-
-player.x += 2;
-if(player.x > 960){
-player.x = -40;
-score += 10;
-scoreEl.innerText = score;
-}
-
-ctx.fillStyle = "#16a34a";
-ctx.fillRect(0,460,960,80);
-
-ctx.fillStyle = "#ef4444";
-ctx.fillRect(player.x,player.y,player.w,player.h);
-
-ctx.fillStyle = "#fff";
-ctx.font = "24px Arial";
-ctx.fillText("Score: "+score,20,30);
-}
-
-window.addEventListener("keydown",e=>{
-if(e.code==="Space" && player.y>=420){
-player.vy = -12;
-}
-});
-
-checkUser();
-loadLeaderboard();
-</script>
+</main>
 
 </body>
 </html>
