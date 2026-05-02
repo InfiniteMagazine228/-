@@ -1,0 +1,54 @@
+body{
+margin:0;
+font-family:Arial;
+background:#0f172a;
+color:white;
+}
+
+header{
+padding:15px;
+background:#020617;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+input{
+padding:10px;
+border-radius:10px;
+border:none;
+margin:3px;
+}
+
+button{
+padding:10px 14px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+margin:4px;
+}
+
+main{
+display:grid;
+grid-template-columns:1fr 330px;
+gap:20px;
+padding:20px;
+}
+
+canvas{
+background:#38bdf8;
+border-radius:20px;
+width:100%;
+}
+
+.panel{
+background:#111827;
+padding:20px;
+border-radius:20px;
+}
+
+#leaderboard div{
+padding:6px;
+border-bottom:1px solid #334155;
+}
