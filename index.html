@@ -50,10 +50,51 @@
 </div>
 <footer>© 2026 Yah Games · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a></footer>
 
+
+<!-- MUSIC ONLY -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const bgMusic=document.getElementById("bgMusic");
+bgMusic.volume=0.4;
+
+/* FIX 100% autoplay after user click */
+function startMusic(){
+  bgMusic.play().catch(()=>{});
+}
+
+/* stop */
+function stopMusic(){
+  bgMusic.pause();
+  bgMusic.currentTime=0;
+}
+
+/* click start game = play music */
+document.getElementById("startBtn").onclick=()=>{
+  start();
+  startMusic();
+};
+
+/* if restart after dead/win still play */
+window.addEventListener("pointerdown",startMusic,{once:true});
+window.addEventListener("keydown",startMusic,{once:true});
+
+/* tab hidden pause */
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){
+    bgMusic.pause();
+  }else{
+    if(state==="playing"){
+      bgMusic.play().catch(()=>{});
+    }
+  }
+});
+
 <script>
 const canvas=document.getElementById('game');
 const ctx=canvas.getContext('2d');
-const scoreEl=document.getElementById('score'),coinsEl=document.getElementById('coins'),levelEl=document.getElementById('level'),skinEl=document.getElementById('skin');
 const W=960,H=540,GRAVITY=.58,MAX_LEVEL=4;
 let keys={},state='menu',level=0,score=0,cameraX=0,shake=0;
 let coins=Number(localStorage.getItem('pqCoins')||0),skin=localStorage.getItem('pqSkin')||'Classic',owned=JSON.parse(localStorage.getItem('pqOwned')||'["Classic"]');
